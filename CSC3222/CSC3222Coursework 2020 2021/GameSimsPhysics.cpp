@@ -15,8 +15,9 @@ GameSimsPhysics::~GameSimsPhysics()	{
 }
 
 void GameSimsPhysics::Update(float dt) {
-	Integration(dt);
+	//IntegrationAcceleration(dt);
 	CollisionDetection(dt);
+	//IntegrationVelocity(dt);
 }
 
 void GameSimsPhysics::AddRigidBody(RigidBody* b) {
@@ -45,8 +46,19 @@ void GameSimsPhysics::RemoveCollider(CollisionVolume* c) {
 	}
 }
 
-void GameSimsPhysics::Integration(float dt) {
+void GameSimsPhysics::IntegrationAcceleration(float dt) {
+	for (auto i : allBodies) {
+		auto accleration = i->force * i->inverseMass;
+		i->velocity += accleration * dt;
+	}
+}
 
+void GameSimsPhysics::IntegrationVelocity(float dt) {
+	for (auto i : allBodies) {
+		i->position = i->force * i->inverseMass;
+		i->position = i->position + i->velocity * dt;
+		i->position *= 0.99999;
+	}
 }
 
 void GameSimsPhysics::CollisionDetection(float dt) {

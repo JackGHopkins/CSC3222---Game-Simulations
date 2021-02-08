@@ -101,6 +101,11 @@ bool PlayerCharacter::UpdateObject(float dt) {
 			currentAnimState = PlayerState::Attack;
 			currentanimFrame = 0;
 		}
+		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::UP)) {
+			animSource = ladderFrames;
+			currentAnimState = PlayerState::Climb;
+			newVelocity.y = testSpeed * dt / 2;
+		}
 	}
 
 	position += newVelocity;

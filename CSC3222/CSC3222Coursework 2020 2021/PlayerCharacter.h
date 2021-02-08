@@ -15,7 +15,8 @@ namespace NCL::CSC3222 {
 			Attack,
 			Fall,
 			Die,
-			Idle
+			Idle,
+			Climb
 		};
 		PlayerState		currentAnimState;
 	};

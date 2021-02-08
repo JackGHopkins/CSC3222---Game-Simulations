@@ -21,7 +21,8 @@ namespace NCL {
 			void RemoveCollider(CollisionVolume* c);
 
 		protected:
-			void Integration(float dt);
+			void IntegrationAcceleration(float dt);
+			void IntegrationVelocity(float dt);
 			void CollisionDetection(float dt);
 
 			std::vector<RigidBody*>			allBodies;
