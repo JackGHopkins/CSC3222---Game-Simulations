@@ -1,0 +1,16 @@
+This year the coursework uses the following assets from OpenGameArt.org:
+
+https://opengameart.org/content/arcade-platformer-assets
+https://opengameart.org/content/mini-fantasy-sprites
+https://opengameart.org/content/super-random-sprites
+All by GrafxKid
+
+
+https://opengameart.org/content/lpc-frogman
+By Evert and Redshrike
+
+https://opengameart.org/content/weird-fruits-16x16
+By KnoblePersona
+
+https://opengameart.org/content/platform-2d-tilesets
+By Zopto (I modified their ladder tiles!)
