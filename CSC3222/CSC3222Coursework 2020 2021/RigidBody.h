@@ -26,9 +26,18 @@ namespace NCL {
 				velocity = newVelocity;
 			}
 
+			Vector2 GetForce() const {
+				return force;
+			}
+
+			void SetForce(const Vector2& newForce) {
+				force = newForce;
+			}
+
 			void AddForce(const Vector2& newForce) {
 				force += newForce;
 			}
+
 
 
 		protected:

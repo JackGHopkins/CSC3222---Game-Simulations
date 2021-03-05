@@ -7,7 +7,14 @@ CollisionVolume::CollisionVolume()
 {
 }
 
-
 CollisionVolume::~CollisionVolume()
 {
+}
+
+void CollisionDetection() {
+	//for (int i = 0; i < allColliders.size(); i++) {
+	//	for (int j = i - 1; i < allColliders.size(); j++) {
+
+	//	}
+	//}
 }

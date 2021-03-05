@@ -15,9 +15,6 @@
     <Filter Include="Physics">
       <UniqueIdentifier>{83b0fa4c-c9eb-4c80-9747-28200032d08f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics">
-      <UniqueIdentifier>{11a4ef05-3a7f-4c90-9fac-67bea53510f5}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSC3222.cpp">
@@ -31,12 +28,6 @@
     </ClCompile>
     <ClCompile Include="GameSimsPhysics.cpp">
       <Filter>Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="GameSimsRenderer.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="RigidBody.cpp">
       <Filter>Physics</Filter>
@@ -68,52 +59,58 @@
     <ClCompile Include="Spell.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="GameSimsRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SimObject.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="GameSimsPhysics.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="GameSimsRenderer.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="RigidBody.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionVolume.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="GameMap.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerCharacter.h">
-      <Filter>Objects</Filter>
+    <ClInclude Include="Froggo.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Fruit.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="PixieDust.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Pixie.h">
-      <Filter>Objects</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Guard.h">
-      <Filter>Objects</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Froggo.h">
-      <Filter>Objects</Filter>
+    <ClInclude Include="Pixie.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FruitWizardGame.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="PixieDust.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCharacter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimObject.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Spell.h">
-      <Filter>Objects</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSimsRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FruitWizardGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSimsPhysics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionVolume.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBody.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

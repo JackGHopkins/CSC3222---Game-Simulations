@@ -65,7 +65,7 @@ void FruitWizardGame::Update(float dt) {
 	renderer->DrawString("Magic:" + std::to_string(magicCount), 
 		Vector2(256, 12), Vector4(1, 0, 0.5f, 1), 100.0f);
 	renderer->DrawString("Dust:"  + std::to_string(dustCount), 
-		Vector2(366, 12), Vector4(0.5f, 0.3f, 0.8f, 1), 100.0f);
+		Vector2(366, 12), Vector4(0.5f, 0.3f, 0.8, 1), 100.0f);
 
 	/*
 	Some examples of debug rendering! 
@@ -75,8 +75,10 @@ void FruitWizardGame::Update(float dt) {
 	renderer->DrawLine(Vector2(16, 16), Vector2(192, 192), Vector4(1, 1, 0, 1));
 	renderer->DrawCircle(Vector2(100, 100), 10.0f, Vector4(1, 0, 1, 1));
 
-	renderer->DrawCircle(player->GetPosition(), 10.0f, Vector4(1, 0, 1, 1));
-	renderer->DrawBox(player->GetPosition(), Vector2(8, 8), Vector4(1, 0, 0, 1));
+	renderer->DrawCircle(player->GetPosition(), 6.0f, Vector4(1, 0, 0, 1));
+	renderer->DrawBox(Vector2(player->GetPosition().x, player->GetPosition().y - 8), Vector2(6, 8), Vector4(1, 0, 0, 1));
+
+	VisualiseColliders();
 
 	renderer->Render();
 }
@@ -133,4 +135,61 @@ void FruitWizardGame::AddNewObject(SimObject* object) {
 	if (object->GetCollider()) {
 		physics->AddCollider(object->GetCollider());
 	}
+}
+
+void FruitWizardGame::VisualiseColliders() {
+	int tileSize = 16;
+	int halfTileSize = tileSize / 2;
+
+	// Walls
+	renderer->DrawBox(Vector2(halfTileSize, tileSize * 10), Vector2(halfTileSize, 160), Vector4(0, 0, 0, 1)); // Left
+	renderer->DrawBox(Vector2(30 * tileSize - halfTileSize, tileSize*10), Vector2(halfTileSize, 160), Vector4(0, 0, 0, 1)); // Right
+
+	// Floors
+	renderer->DrawBox(Vector2(15 * tileSize, halfTileSize), Vector2(224, halfTileSize), Vector4(0, 0, 0, 1)); // Bottom
+
+	renderer->DrawBox(Vector2(3 * tileSize + halfTileSize, 4 * tileSize + halfTileSize), Vector2(tileSize * 5 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 1;0
+	renderer->DrawBox(Vector2(8 * tileSize + halfTileSize, 4 * tileSize + halfTileSize), Vector2(tileSize * 1 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 1:1
+	renderer->DrawBox(Vector2(12.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize), Vector2(tileSize * 4 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 1:2
+	renderer->DrawBox(Vector2(22.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize), Vector2(tileSize * 12 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 1:3
+
+	renderer->DrawBox(Vector2(16 * tileSize + halfTileSize, 8 * tileSize + halfTileSize), Vector2(tileSize * 11 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 2:0
+	renderer->DrawBox(Vector2(26 * tileSize + halfTileSize, 8 * tileSize + halfTileSize), Vector2(tileSize * 5 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 2:1
+
+	renderer->DrawBox(Vector2(6.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize), Vector2(tileSize * 8 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 3:0
+	renderer->DrawBox(Vector2(13 * tileSize + halfTileSize, 12 * tileSize + halfTileSize), Vector2(tileSize * 1 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 3:1
+	renderer->DrawBox(Vector2(17 * tileSize + halfTileSize, 12 * tileSize + halfTileSize), Vector2(tileSize * 1 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 3:2
+	renderer->DrawBox(Vector2(21 * tileSize + halfTileSize, 12 * tileSize + halfTileSize), Vector2(tileSize * 3 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 3:3
+
+	renderer->DrawBox(Vector2(2.5 * tileSize + halfTileSize, 16 * tileSize + halfTileSize), Vector2(tileSize * 4 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 4:0
+	renderer->DrawBox(Vector2(7 * tileSize + halfTileSize, 16 * tileSize + halfTileSize), Vector2(tileSize * 1 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 4:1
+	renderer->DrawBox(Vector2(19 * tileSize + halfTileSize, 16 * tileSize + halfTileSize), Vector2(tileSize * 13 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 4:2
+	renderer->DrawBox(Vector2(28 * tileSize + halfTileSize, 16 * tileSize + halfTileSize), Vector2(tileSize * 1 / 2, halfTileSize), Vector4(0, 0, 0, 1)); // Floor 4:3
+
+	// Ladder Tops
+	renderer->DrawBox(Vector2(6.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, halfTileSize), Vector4(0, 0, 1, 1)); // Floor 1:0
+	renderer->DrawBox(Vector2(15.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, halfTileSize), Vector4(0, 0, 1, 1)); // Floor 1:1
+
+	renderer->DrawBox(Vector2(22.5 * tileSize + halfTileSize, 8 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, halfTileSize), Vector4(0, 0, 1, 1)); // Floor 2:0
+
+	renderer->DrawBox(Vector2(1.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, halfTileSize), Vector4(0, 0, 1, 1)); // Floor 3:0
+	renderer->DrawBox(Vector2(11.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, halfTileSize), Vector4(0, 0, 1, 1)); // Floor 3:1
+	renderer->DrawBox(Vector2(18.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, halfTileSize), Vector4(0, 0, 1, 1)); // Floor 3:2
+
+	renderer->DrawBox(Vector2(5.5 * tileSize + halfTileSize, 16 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, halfTileSize), Vector4(0, 0, 1, 1)); // Floor 4:0
+	renderer->DrawBox(Vector2(26.5 * tileSize + halfTileSize, 16 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, halfTileSize), Vector4(0, 0, 1, 1)); // Floor 4:1
+
+
+	// Ladder Mid & bottom
+	renderer->DrawBox(Vector2(6.5 * tileSize + halfTileSize, 2 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, 3 * halfTileSize), Vector4(0, 1, 1, 1)); // Floor 1:0
+	renderer->DrawBox(Vector2(15.5 * tileSize + halfTileSize, 2 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, 3 * halfTileSize), Vector4(0, 1, 1, 1)); // Floor 1:1
+
+	renderer->DrawBox(Vector2(22.5 * tileSize + halfTileSize, 6 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, 3 * halfTileSize), Vector4(0, 1, 1, 1)); // Floor 2:0
+
+	renderer->DrawBox(Vector2(1.5 * tileSize + halfTileSize, 8 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, 7 * halfTileSize), Vector4(0, 1, 1, 1)); // Floor 3:0
+	renderer->DrawBox(Vector2(11.5 * tileSize + halfTileSize, 10 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, 3 * halfTileSize), Vector4(0, 1, 1, 1)); // Floor 3:1
+	renderer->DrawBox(Vector2(18.5 * tileSize + halfTileSize, 10 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, 3 * halfTileSize), Vector4(0, 1, 1, 1)); // Floor 3:2
+
+	renderer->DrawBox(Vector2(5.5 * tileSize + halfTileSize, 14 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, 3 * halfTileSize), Vector4(0, 1, 1, 1)); // Floor 4:0
+	renderer->DrawBox(Vector2(26.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, 7 * halfTileSize), Vector4(0, 1, 1, 1)); // Floor 4:1
 }

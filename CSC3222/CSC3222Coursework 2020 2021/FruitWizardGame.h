@@ -19,6 +19,8 @@ namespace NCL::CSC3222 {
 
 		void AddNewObject(SimObject* object);
 
+		void VisualiseColliders();
+
 	protected:
 		void InitialiseGame();
 

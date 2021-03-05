@@ -72,7 +72,7 @@ PlayerCharacter::~PlayerCharacter() {
 }
 
 bool PlayerCharacter::UpdateObject(float dt) {
-	float testSpeed = 64;
+	float testSpeed = 30;
 	Vector4* animSource = idleFrames;
 
 	Vector2 newVelocity;
@@ -88,13 +88,13 @@ bool PlayerCharacter::UpdateObject(float dt) {
 		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::LEFT)) {
 			animSource = runFrames;
 			currentAnimState = PlayerState::Left;
-			newVelocity.x = -testSpeed * dt;
+			AddForce(Vector2(-testSpeed, 0) / inverseMass);
 			flipAnimFrame = true;
 		}
 		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::RIGHT)) {
 			animSource = runFrames;
 			currentAnimState = PlayerState::Right;
-			newVelocity.x = testSpeed * dt;
+			AddForce(Vector2(testSpeed, 0) / inverseMass);
 			flipAnimFrame = false;
 		}	
 		if (Window::GetKeyboard()->KeyPressed(KeyboardKeys::SPACE)) {
@@ -104,7 +104,12 @@ bool PlayerCharacter::UpdateObject(float dt) {
 		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::UP)) {
 			animSource = ladderFrames;
 			currentAnimState = PlayerState::Climb;
-			newVelocity.y = testSpeed * dt / 2;
+			AddForce(Vector2(0, testSpeed / 2) / inverseMass);
+		}
+		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::DOWN)) {
+			animSource = ladderFrames;
+			currentAnimState = PlayerState::Climb;
+			AddForce(Vector2(0, -testSpeed / 2) / inverseMass);
 		}
 	}
 
