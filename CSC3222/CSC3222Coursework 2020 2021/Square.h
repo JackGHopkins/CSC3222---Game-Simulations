@@ -1,6 +1,7 @@
 #pragma once
 #include "Circle.h"
 #include "CollisionVolume.h"
+#include "SimObject.h"
 
 using namespace NCL::CSC3222;
 using namespace NCL::Maths;
@@ -11,7 +12,7 @@ using namespace NCL::Maths;
 class Square : public CollisionVolume {
 public:
 	/* CONSTRUCTOR & DESTRUCTOR */
-	Square(float posX, float posY, Vector2 length);
+	Square(float posX, float posY, SimObject* object,  Vector2 length);
 	~Square();
 
 	/* METHODS */

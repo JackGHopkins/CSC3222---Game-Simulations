@@ -82,10 +82,7 @@ void FruitWizardGame::Update(float dt) {
 
 	renderer->DrawCircle(player->GetPosition(), 6.0f, Vector4(1, 0, 0, 1));
 	renderer->DrawBox(Vector2(player->GetPosition().x, player->GetPosition().y - 8), Vector2(6, 8), Vector4(1, 0, 0, 1));
-	physics->RemoveCollider(player->GetCollider());
-	player->SetCollider(new Square(player->GetPosition().x, player->GetPosition().y, Vector2(6, 8)));
-	physics->AddCollider(player->GetCollider());
-	//physics->UpdateCollider(player->GetCollider());
+	player->SetCollider(new Square(player->GetPosition().x, player->GetPosition().y, player, Vector2(6, 8)));
 
 	// Test Guard
 	renderer->DrawCircle(Vector2(testGuard->GetPosition().x, testGuard->GetPosition().y - 8), 8, Vector4(1, 0, 0, 1));
@@ -108,12 +105,12 @@ void FruitWizardGame::InitialiseGame() {
 
 	player = new PlayerCharacter();
 	player->SetPosition(Vector2(100, 32));
-	player->SetCollider(new Square(player->GetPosition().x, player->GetPosition().y, Vector2(6, 8)));
+	player->SetCollider(new Square(player->GetPosition().x, player->GetPosition().y, player, Vector2(6, 8)));
 	AddNewObject(player);
 
 	testGuard = new Guard();
 	testGuard->SetPosition(Vector2(130, 224));
-	testGuard->SetCollider(new Circle(testGuard->GetPosition().x, testGuard->GetPosition().y, 8));
+	testGuard->SetCollider(new Circle(testGuard->GetPosition().x, testGuard->GetPosition().y, testGuard, 8));
 	AddNewObject(testGuard);
 
 	Spell* testSpell = new Spell(Vector2(1,0));

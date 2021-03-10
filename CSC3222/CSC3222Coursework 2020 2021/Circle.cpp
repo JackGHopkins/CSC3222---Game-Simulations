@@ -3,7 +3,7 @@
 
 using namespace NCL::CSC3222;
 
-Circle::Circle(float posX, float posY, SimObject object, float radius) :
+Circle::Circle(float posX, float posY, SimObject* object, float radius) :
 	CollisionVolume(posX - radius, posY - radius, object), // minus radius to make the position being in the center, not bottom left. 
 	radius(radius) {}
 

@@ -4,8 +4,8 @@
 using namespace NCL::CSC3222;
 
 
-Square::Square(float posX, float posY, Vector2 halfLength) : 
-	CollisionVolume(posX - halfLength.x, posY - halfLength.y), // minus halfLength to make the position being in the center, not bottom left. 
+Square::Square(float posX, float posY, SimObject* object, Vector2 halfLength) : 
+	CollisionVolume(posX - halfLength.x, posY - halfLength.y, object), // minus halfLength to make the position being in the center, not bottom left. 
 	halfLength(halfLength) {}
 
 Square::~Square() {}
