@@ -46,5 +46,13 @@ void Spell::DrawObject(GameSimsRenderer &r) {
 
 bool Spell::UpdateObject(float dt) {
 	animFrameData = explodeFrames[currentanimFrame];
+
+	int fps = 60;
+	int timeLimit = 3 * fps;
+	time++;
+
+	//if (time * fps > timeLimit)
+	//	delete this;
+
 	return true;
 }

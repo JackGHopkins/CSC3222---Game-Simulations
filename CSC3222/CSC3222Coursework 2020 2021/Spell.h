@@ -13,6 +13,8 @@ namespace NCL {
 
 			void DrawObject(GameSimsRenderer &r) override;
 			bool UpdateObject(float dt) override;
+		private:
+			int time = 0;
 		};
 	}
 }

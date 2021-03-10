@@ -84,6 +84,13 @@ void FruitWizardGame::Update(float dt) {
 	renderer->DrawBox(Vector2(player->GetPosition().x, player->GetPosition().y - 8), Vector2(6, 8), Vector4(1, 0, 0, 1));
 	player->SetCollider(new Square(player->GetPosition().x, player->GetPosition().y, player, Vector2(6, 8)));
 
+	if (Window::GetKeyboard()->KeyPressed(KeyboardKeys::SPACE)) {
+		Spell* testSpell = new Spell(Vector2(1, 0));
+		testSpell->SetPosition(Vector2(160, 48));
+		AddNewObject(testSpell);
+	}
+
+
 	// Test Guard
 	renderer->DrawBox(Vector2(testGuard->GetPosition().x, testGuard->GetPosition().y - 2), Vector2(10,14), Vector4(1, 0, 0, 1));
 
@@ -113,9 +120,7 @@ void FruitWizardGame::InitialiseGame() {
 	testGuard->SetCollider(new Square(testGuard->GetPosition().x, testGuard->GetPosition().y, testGuard, Vector2(10,14)));
 	AddNewObject(testGuard);
 
-	Spell* testSpell = new Spell(Vector2(1,0));
-	testSpell->SetPosition(Vector2(160, 48));
-	AddNewObject(testSpell);
+
 
 	Fruit* testFruit = new Fruit();
 	testFruit->SetPosition(Vector2(250, 150));

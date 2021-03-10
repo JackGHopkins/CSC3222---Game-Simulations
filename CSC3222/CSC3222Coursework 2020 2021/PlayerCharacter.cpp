@@ -71,6 +71,10 @@ PlayerCharacter::~PlayerCharacter() {
 
 }
 
+PlayerCharacter::PlayerState PlayerCharacter::GetCurrentAnimState() {
+	return currentAnimState;
+}
+
 bool PlayerCharacter::UpdateObject(float dt) {
 	float testSpeed = 30;
 	Vector4* animSource = idleFrames;
