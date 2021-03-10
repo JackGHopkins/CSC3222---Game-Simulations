@@ -52,5 +52,23 @@ Guard::~Guard() {
 bool Guard::UpdateObject(float dt) {
 	animFrameData = guardWalkFrames[currentanimFrame];
 
+	float testSpeed = 10;
+	int fps = 60;
+	Vector4* animSource = guardIdleFrames;
+		
+	frame ++;
+	if (frame <= 3 * fps) {
+		AddForce(Vector2(testSpeed, 0) / inverseMass);
+		flipAnimFrame = true;
+	} 
+	else if (frame >= 3 * fps) {
+		AddForce(Vector2(-testSpeed, 0) / inverseMass);
+		flipAnimFrame = false;
+	}
+
+	if (frame > 6 * fps) {
+		frame = 0;
+	}
+
 	return true;
 }

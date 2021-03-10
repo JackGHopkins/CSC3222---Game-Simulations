@@ -70,5 +70,25 @@ Froggo::~Froggo() {
 bool Froggo::UpdateObject(float dt) {
 	animFrameData = froggoWalkFrames[currentanimFrame];
 
+	float testSpeed = 20;
+	int fps = 60;
+	int timeLimit = 2;
+	Vector4* animSource = froggoIdleFrames;
+
+	frame++;
+
+	if (frame <= timeLimit * fps) {
+		AddForce(Vector2(testSpeed, 0) / inverseMass);
+		flipAnimFrame = true;
+	}
+	else if (frame >= timeLimit * fps) {
+		AddForce(Vector2(-testSpeed, 0) / inverseMass);
+		flipAnimFrame = false;
+	}
+
+	if (frame > timeLimit * 2 * fps) {
+		frame = 0;
+	}
+
 	return true;
 }

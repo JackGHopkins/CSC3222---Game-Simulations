@@ -10,5 +10,6 @@ namespace NCL::CSC3222 {
 		bool UpdateObject(float dt) override;
 
 	protected:
+		int frame = 0;
 	};
 }

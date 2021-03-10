@@ -85,7 +85,7 @@ void FruitWizardGame::Update(float dt) {
 	player->SetCollider(new Square(player->GetPosition().x, player->GetPosition().y, player, Vector2(6, 8)));
 
 	// Test Guard
-	renderer->DrawCircle(Vector2(testGuard->GetPosition().x, testGuard->GetPosition().y - 8), 8, Vector4(1, 0, 0, 1));
+	renderer->DrawBox(Vector2(testGuard->GetPosition().x, testGuard->GetPosition().y - 2), Vector2(10,14), Vector4(1, 0, 0, 1));
 
 	VisualiseColliders();
 
@@ -110,7 +110,7 @@ void FruitWizardGame::InitialiseGame() {
 
 	testGuard = new Guard();
 	testGuard->SetPosition(Vector2(130, 224));
-	testGuard->SetCollider(new Circle(testGuard->GetPosition().x, testGuard->GetPosition().y, testGuard, 8));
+	testGuard->SetCollider(new Square(testGuard->GetPosition().x, testGuard->GetPosition().y, testGuard, Vector2(10,14)));
 	AddNewObject(testGuard);
 
 	Spell* testSpell = new Spell(Vector2(1,0));
