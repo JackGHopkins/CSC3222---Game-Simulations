@@ -2,6 +2,7 @@
 #include <vector>
 
 namespace NCL::CSC3222 {
+	class Collision;
 	class GameMap;
 	class SimObject;
 	class GameSimsRenderer;
@@ -9,6 +10,7 @@ namespace NCL::CSC3222 {
 	class TextureBase;
 	class TextureManager;
 	class PlayerCharacter;
+	class Guard;
 
 	class FruitWizardGame {
 	public:
@@ -23,13 +25,13 @@ namespace NCL::CSC3222 {
 
 	protected:
 		void InitialiseGame();
-
 		TextureManager*		texManager;
 		GameSimsRenderer*	renderer;
 		GameSimsPhysics*	physics;
-		GameMap* currentMap;
+		GameMap*			currentMap;
 
-		PlayerCharacter* player;
+		PlayerCharacter*	player;
+		Guard*				testGuard;
 
 		float gameTime;
 
@@ -40,5 +42,6 @@ namespace NCL::CSC3222 {
 
 		std::vector<SimObject*> gameObjects;
 		std::vector<SimObject*> newObjects;
+		std::vector<Collision*> allColliders;
 	};
 }

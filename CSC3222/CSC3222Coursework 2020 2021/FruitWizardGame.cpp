@@ -1,6 +1,9 @@
 #include "FruitWizardGame.h"
 #include "SimObject.h"
 #include "GameMap.h"
+#include "Circle.h"
+#include "Collision.h"
+#include "CollisionVolume.h"
 #include "TextureManager.h"
 #include "GameSimsRenderer.h"
 #include "GameSimsPhysics.h"
@@ -11,17 +14,19 @@
 #include "Pixie.h"
 #include "PixieDust.h"
 #include "Spell.h"
+#include "Square.h"
+#include <iostream>
+#include <vector>
 
 #include "../../Common/Window.h"
 #include "../../Common/TextureLoader.h"
 
-using namespace NCL;
-using namespace CSC3222;
+using namespace NCL::CSC3222;
 
 FruitWizardGame::FruitWizardGame()	{
-	renderer	= new GameSimsRenderer();
-	texManager	= new TextureManager();
-	physics		= new GameSimsPhysics();
+	renderer		= new GameSimsRenderer();
+	texManager		= new TextureManager();
+	physics			= new GameSimsPhysics();
 	SimObject::InitObjects(this, texManager);
 	InitialiseGame();
 }
@@ -77,6 +82,13 @@ void FruitWizardGame::Update(float dt) {
 
 	renderer->DrawCircle(player->GetPosition(), 6.0f, Vector4(1, 0, 0, 1));
 	renderer->DrawBox(Vector2(player->GetPosition().x, player->GetPosition().y - 8), Vector2(6, 8), Vector4(1, 0, 0, 1));
+	physics->RemoveCollider(player->GetCollider());
+	player->SetCollider(new Square(player->GetPosition().x, player->GetPosition().y, Vector2(6, 8)));
+	physics->AddCollider(player->GetCollider());
+	//physics->UpdateCollider(player->GetCollider());
+
+	// Test Guard
+	renderer->DrawCircle(Vector2(testGuard->GetPosition().x, testGuard->GetPosition().y - 8), 8, Vector4(1, 0, 0, 1));
 
 	VisualiseColliders();
 
@@ -96,10 +108,12 @@ void FruitWizardGame::InitialiseGame() {
 
 	player = new PlayerCharacter();
 	player->SetPosition(Vector2(100, 32));
+	player->SetCollider(new Square(player->GetPosition().x, player->GetPosition().y, Vector2(6, 8)));
 	AddNewObject(player);
 
-	Guard* testGuard = new Guard();
-	testGuard->SetPosition(Vector2(150, 224));
+	testGuard = new Guard();
+	testGuard->SetPosition(Vector2(130, 224));
+	testGuard->SetCollider(new Circle(testGuard->GetPosition().x, testGuard->GetPosition().y, 8));
 	AddNewObject(testGuard);
 
 	Spell* testSpell = new Spell(Vector2(1,0));
@@ -138,11 +152,13 @@ void FruitWizardGame::AddNewObject(SimObject* object) {
 }
 
 void FruitWizardGame::VisualiseColliders() {
-	int tileSize = 16;
-	int halfTileSize = tileSize / 2;
+	float tileSize = 16;
+	float halfTileSize = tileSize / 2;
 
 	// Walls
 	renderer->DrawBox(Vector2(halfTileSize, tileSize * 10), Vector2(halfTileSize, 160), Vector4(0, 0, 0, 1)); // Left
+	
+	
 	renderer->DrawBox(Vector2(30 * tileSize - halfTileSize, tileSize*10), Vector2(halfTileSize, 160), Vector4(0, 0, 0, 1)); // Right
 
 	// Floors

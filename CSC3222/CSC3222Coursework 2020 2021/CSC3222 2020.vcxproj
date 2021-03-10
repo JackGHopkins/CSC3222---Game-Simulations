@@ -144,6 +144,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Circle.cpp" />
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Froggo.cpp" />
     <ClCompile Include="Guard.cpp" />
     <ClCompile Include="Pixie.cpp" />
@@ -159,9 +161,12 @@
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="FruitWizardGame.cpp" />
     <ClCompile Include="SimObject.cpp" />
+    <ClCompile Include="Square.cpp" />
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Circle.h" />
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="Froggo.h" />
     <ClInclude Include="Guard.h" />
     <ClInclude Include="Pixie.h" />
@@ -176,6 +181,7 @@
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="FruitWizardGame.h" />
     <ClInclude Include="SimObject.h" />
+    <ClInclude Include="Square.h" />
     <ClInclude Include="TextureManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

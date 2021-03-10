@@ -18,6 +18,7 @@ namespace NCL {
 			void RemoveRigidBody(RigidBody* b);
 
 			void AddCollider(CollisionVolume* c);
+			void UpdateCollider(CollisionVolume* c);
 			void RemoveCollider(CollisionVolume* c);
 
 		protected:

@@ -41,6 +41,13 @@ void GameSimsPhysics::AddCollider(CollisionVolume* c) {
 	allColliders.emplace_back(c);
 }
 
+void GameSimsPhysics::UpdateCollider(CollisionVolume* c) {
+	for (int i = 0; i < allColliders.size(); i++) {
+		if (allColliders[i] == c)
+			allColliders[i] = c;			
+	}
+}
+
 void GameSimsPhysics::RemoveCollider(CollisionVolume* c) {
 	auto at = std::find(allColliders.begin(), allColliders.end(), c);
 
@@ -65,5 +72,12 @@ void GameSimsPhysics::IntegrationVelocity(float dt) {
 }
 
 void GameSimsPhysics::CollisionDetection(float dt) {
+	int size = allColliders.size();
+	for (int i = 0; i < size; i++) {
+		for (int j = i + 1; j < size; j++) {
 
+			if (allColliders[i]->CheckCollision(*allColliders[j]))
+				std::cout << "Collision between: [" << allColliders[i] << "," << allColliders[j] << "]" << std::endl;
+		}
+	}
 }
