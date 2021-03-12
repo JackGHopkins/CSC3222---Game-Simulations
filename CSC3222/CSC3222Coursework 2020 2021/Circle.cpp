@@ -4,8 +4,8 @@
 using namespace NCL::CSC3222;
 
 Circle::Circle(float posX, float posY, SimObject* object, float radius) :
-	CollisionVolume(posX - radius, posY - radius, object), // minus radius to make the position being in the center, not bottom left. 
-	radius(radius) {}
+	CollisionVolume(posX, posY, Vector2(radius, radius), object),// minus radius to make the position being in the center, not bottom left. 
+	radius(radius) {};
 
 Circle::~Circle() {}
 
@@ -16,11 +16,11 @@ float Circle::GetRadius() const {
 bool Circle::CheckCollision(CollisionVolume& Other) {
 	Collision collision;
 		try {
-			// Checks if Other is a Circle or a Square.
+			// Checks if Other is a Circle or a Box.
 			if (typeid(Other) == typeid(Circle))
 				return collision.isCollision(static_cast<Circle&>(Other), *this);
-			else if (typeid(Other) == typeid(Square))
-				return collision.isCollision(*this, static_cast<Square&>(Other));
+			else if (typeid(Other) == typeid(Box))
+				return collision.isCollision(*this, static_cast<Box&>(Other));
 			else
 				throw "Error: Shape Type Not Found.";
 		}

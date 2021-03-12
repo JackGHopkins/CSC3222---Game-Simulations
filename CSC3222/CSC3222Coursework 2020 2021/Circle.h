@@ -1,7 +1,7 @@
 #pragma once
 #include "CollisionVolume.h"
 #include "SimObject.h"
-#include "Square.h"
+#include "Box.h"
 
 using namespace NCL::CSC3222;
 

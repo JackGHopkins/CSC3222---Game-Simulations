@@ -11,6 +11,8 @@ namespace NCL::CSC3222 {
 	class TextureManager;
 	class PlayerCharacter;
 	class Guard;
+	class Pixie;
+	class Fruit;
 
 	class FruitWizardGame {
 	public:
@@ -18,10 +20,10 @@ namespace NCL::CSC3222 {
 		~FruitWizardGame();
 
 		void Update(float dt);
-
 		void AddNewObject(SimObject* object);
-
-		void VisualiseColliders();
+		void VisualiseEnviromentColliders();
+		void SetEnviromentCollisions();
+		float RandomNumber(float Min, float Max);
 
 	protected:
 		void InitialiseGame();
@@ -32,6 +34,8 @@ namespace NCL::CSC3222 {
 
 		PlayerCharacter*	player;
 		Guard*				testGuard;
+		Pixie*				testPixie;
+		Fruit*				testFruit;
 
 		float gameTime;
 

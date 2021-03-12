@@ -65,13 +65,16 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Square.cpp">
-      <Filter>Physics</Filter>
-    </ClCompile>
     <ClCompile Include="Circle.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTree.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -124,10 +127,13 @@
     <ClInclude Include="Circle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Square.h">
+    <ClInclude Include="Collision.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Collision.h">
+    <ClInclude Include="QuadTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,10 +1,10 @@
 #include "Circle.h"
 #include "Collision.h"
-#include "Square.h"
+#include "Box.h"
 #include <math.h>
 
 class Circle;
-class Square;
+class Box;
 
 /*
 	Checks collisions between two Circles.
@@ -15,9 +15,9 @@ bool Collision::isCollision(Circle& c1, Circle& c2)
 }
 
 /*
-	Checks collisions between two Squares.
+	Checks collisions between two Boxs.
 */
-bool Collision::isCollision(Square& s1, Square& s2)
+bool Collision::isCollision(Box& s1, Box& s2)
 {
 	if (s1.GetPosX() < s2.GetPosX() + (s2.GetHalfLength().x * 2) &&	// Checks if s1 is right of s2's left side.    
 		s1.GetPosX() + (s1.GetHalfLength().x * 2) > s2.GetPosX() &&	// Checks if s1 is left of s2's right side.  
@@ -30,9 +30,9 @@ bool Collision::isCollision(Square& s1, Square& s2)
 }
 
 /*
-	Checks collisions between a Circle and a Square.
+	Checks collisions between a Circle and a Box.
 */
-bool Collision::isCollision(Circle& c, Square& s)
+bool Collision::isCollision(Circle& c, Box& s)
 {
 	// Finds the distance between the centers of the shapes.
 	float distanceX = fabsf(c.GetPosX() - s.GetPosX());
@@ -50,7 +50,7 @@ bool Collision::isCollision(Circle& c, Square& s)
 	if (distanceY <= (s.GetHalfLength().y))
 		return true;
 
-	// Checks if Circle is overlapping with the corner of the Square.
+	// Checks if Circle is overlapping with the corner of the Box.
 	float cornerCheck = powf((distanceX - s.GetHalfLength().x), 2.0) +
 		powf((distanceY - s.GetHalfLength().y), 2.0);
 
@@ -60,7 +60,7 @@ bool Collision::isCollision(Circle& c, Square& s)
 
 /*
 	For checking if the distance between the centers are less then the combined length of the two shapes.
-	If comparing Squares, make sure the "Raidus" of the Squares is the radius are GetLength() / 2.
+	If comparing Boxs, make sure the "Raidus" of the Boxs is the radius are GetLength() / 2.
 */
 bool Collision::IsSameShapeCollide(float x1, float y1, float r1, float x2, float y2, float r2) const
 {

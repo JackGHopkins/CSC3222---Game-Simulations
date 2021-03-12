@@ -41,7 +41,7 @@ namespace NCL {
 			int structureCount;
 
 			Rendering::TextureBase*	tileTexture;
-			char*	mapData;
+			char*			mapData;
 			int*			mapCosts;
 			Vector2*		mapTexCoords;
 

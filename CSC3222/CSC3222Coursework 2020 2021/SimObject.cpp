@@ -44,3 +44,8 @@ void SimObject::DrawObject(GameSimsRenderer& r) {
 
 	r.DrawTextureArea((OGLTexture*)texture, texPos, texSize, position, flipAnimFrame);
 }
+
+//Vector2 SimObject::SpringMovement(SimObject* parentObject, float minDist, float maxDist, float maxVel) {
+//	//return minDist + (parentObject->GetVelocity() / maxVel) * (maxDist - minDist);
+//	AddForce
+//}

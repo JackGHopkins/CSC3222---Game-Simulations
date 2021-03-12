@@ -1,6 +1,7 @@
 #include "FruitWizardGame.h"
 #include "SimObject.h"
 #include "GameMap.h"
+#include "Box.h"
 #include "Circle.h"
 #include "Collision.h"
 #include "CollisionVolume.h"
@@ -14,7 +15,6 @@
 #include "Pixie.h"
 #include "PixieDust.h"
 #include "Spell.h"
-#include "Square.h"
 #include <iostream>
 #include <vector>
 
@@ -76,25 +76,32 @@ void FruitWizardGame::Update(float dt) {
 	Some examples of debug rendering! 
 	These all use coordinates in the same 'space' as the game positions
 	*/
-	renderer->DrawBox(Vector2(16,16), Vector2(8, 8), Vector4(1, 0, 0, 1));
-	renderer->DrawLine(Vector2(16, 16), Vector2(192, 192), Vector4(1, 1, 0, 1));
-	renderer->DrawCircle(Vector2(100, 100), 10.0f, Vector4(1, 0, 1, 1));
+	//renderer->DrawBox(Vector2(16,16), Vector2(8, 8), Vector4(1, 0, 0, 1));
+	//renderer->DrawLine(Vector2(16, 16), Vector2(192, 192), Vector4(1, 1, 0, 1));
+	//renderer->DrawCircle(Vector2(100, 100), 10.0f, Vector4(1, 0, 1, 1));
 
-	renderer->DrawCircle(player->GetPosition(), 6.0f, Vector4(1, 0, 0, 1));
-	renderer->DrawBox(Vector2(player->GetPosition().x, player->GetPosition().y - 8), Vector2(6, 8), Vector4(1, 0, 0, 1));
-	player->SetCollider(new Square(player->GetPosition().x, player->GetPosition().y, player, Vector2(6, 8)));
+	// Player
+	renderer->DrawBox(Vector2(player->GetPosition().x, player->GetPosition().y), Vector2(10, 10), Vector4(1, 0, 0, 1));
+	player->SetCollider(new Box(player->GetPosition().x, player->GetPosition().y, player, Vector2(10, 10)));
 
+	// Spell
 	if (Window::GetKeyboard()->KeyPressed(KeyboardKeys::SPACE)) {
-		Spell* testSpell = new Spell(Vector2(1, 0));
-		testSpell->SetPosition(Vector2(160, 48));
+		Spell* testSpell = new Spell(Vector2(RandomNumber(-1, 1), RandomNumber(-1, 1)));
+		testSpell->InitMovement();
+		testSpell->SetPosition(Vector2(player->GetPosition().x, player->GetPosition().y));
 		AddNewObject(testSpell);
 	}
-
 
 	// Test Guard
 	renderer->DrawBox(Vector2(testGuard->GetPosition().x, testGuard->GetPosition().y - 2), Vector2(10,14), Vector4(1, 0, 0, 1));
 
-	VisualiseColliders();
+	// Pixie
+	renderer->DrawCircle(Vector2(testPixie->GetPosition().x, testPixie->GetPosition().y), 10, Vector4(1, 0, 0, 1));
+
+	// Fruit
+	renderer->DrawCircle(Vector2(testFruit->GetPosition().x, testFruit->GetPosition().y), 10, Vector4(1, 0, 0, 1));
+
+	VisualiseEnviromentColliders();
 
 	renderer->Render();
 }
@@ -112,27 +119,27 @@ void FruitWizardGame::InitialiseGame() {
 
 	player = new PlayerCharacter();
 	player->SetPosition(Vector2(100, 32));
-	player->SetCollider(new Square(player->GetPosition().x, player->GetPosition().y, player, Vector2(6, 8)));
+	player->SetCollider(new Box(player->GetPosition().x, player->GetPosition().y, player, Vector2(10, 10)));
 	AddNewObject(player);
 
 	testGuard = new Guard();
 	testGuard->SetPosition(Vector2(130, 224));
-	testGuard->SetCollider(new Square(testGuard->GetPosition().x, testGuard->GetPosition().y, testGuard, Vector2(10,14)));
+	testGuard->SetCollider(new Box(testGuard->GetPosition().x, testGuard->GetPosition().y, testGuard, Vector2(10,14)));
 	AddNewObject(testGuard);
 
-
-
-	Fruit* testFruit = new Fruit();
+	testFruit = new Fruit();
 	testFruit->SetPosition(Vector2(250, 150));
+	testFruit->SetCollider(new Circle(testFruit->GetPosition().x, testFruit->GetPosition().y, testFruit, 10));
 	AddNewObject(testFruit);
 
 	PixieDust* testDust = new PixieDust();
-	testDust->SetPosition(Vector2(285, 220));
+	testDust->SetPosition(Vector2(200, 100));
 	AddNewObject(testDust);
 
-	Pixie* pixie = new Pixie();
-	pixie->SetPosition(Vector2(350, 96));
-	AddNewObject(pixie);
+	testPixie = new Pixie();
+	testPixie->SetPosition(Vector2(100, 155));
+	testPixie->SetCollider(new Circle(testPixie->GetPosition().x, testPixie->GetPosition().y, testPixie, 10));
+	AddNewObject(testPixie);
 
 	Froggo* testFroggo = new Froggo();
 	testFroggo->SetPosition(Vector2(370, 285));
@@ -143,6 +150,8 @@ void FruitWizardGame::InitialiseGame() {
 	magicCount		= 0;
 	dustCount		= 0;
 	lives			= 3;
+
+	//SetEnviromentCollisions();
 }
 
 void FruitWizardGame::AddNewObject(SimObject* object) {
@@ -153,14 +162,14 @@ void FruitWizardGame::AddNewObject(SimObject* object) {
 	}
 }
 
-void FruitWizardGame::VisualiseColliders() {
+void FruitWizardGame::VisualiseEnviromentColliders() {
 	float tileSize = 16;
 	float halfTileSize = tileSize / 2;
 
 	// Walls
 	renderer->DrawBox(Vector2(halfTileSize, tileSize * 10), Vector2(halfTileSize, 160), Vector4(0, 0, 0, 1)); // Left
 	
-	
+
 	renderer->DrawBox(Vector2(30 * tileSize - halfTileSize, tileSize*10), Vector2(halfTileSize, 160), Vector4(0, 0, 0, 1)); // Right
 
 	// Floors
@@ -210,4 +219,69 @@ void FruitWizardGame::VisualiseColliders() {
 
 	renderer->DrawBox(Vector2(5.5 * tileSize + halfTileSize, 14 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, 3 * halfTileSize), Vector4(0, 1, 1, 1)); // Floor 4:0
 	renderer->DrawBox(Vector2(26.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize), Vector2(tileSize * 2 / 2, 7 * halfTileSize), Vector4(0, 1, 1, 1)); // Floor 4:1
+}
+
+void FruitWizardGame::SetEnviromentCollisions() {
+	float tileSize = 16;
+	float halfTileSize = tileSize / 2;
+
+	// Walls
+	physics->AddCollider(new Box(halfTileSize, tileSize * 10, Vector2(halfTileSize, 160))); // Left
+	testGuard->SetCollider(new Box(testGuard->GetPosition().x, testGuard->GetPosition().y, testGuard, Vector2(10, 14)));
+
+
+	physics->AddCollider(new Box(30 * tileSize - halfTileSize, tileSize * 10, Vector2(halfTileSize, 160))); // Right
+
+	// Floors
+	physics->AddCollider(new Box(15 * tileSize, halfTileSize, Vector2(224, halfTileSize))); // Bottom
+
+	physics->AddCollider(new Box(3 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 5 / 2, halfTileSize))); // Floor 1;0
+	physics->AddCollider(new Box(8 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 1 / 2, halfTileSize))); // Floor 1:1
+	physics->AddCollider(new Box(12.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 4 / 2, halfTileSize))); // Floor 1:2
+	physics->AddCollider(new Box(22.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 12 / 2, halfTileSize))); // Floor 1:3
+
+	physics->AddCollider(new Box(16 * tileSize + halfTileSize, 8 * tileSize + halfTileSize, Vector2(tileSize * 11 / 2, halfTileSize))); // Floor 2:0
+	physics->AddCollider(new Box(26 * tileSize + halfTileSize, 8 * tileSize + halfTileSize, Vector2(tileSize * 5 / 2, halfTileSize))); // Floor 2:1
+
+	physics->AddCollider(new Box(6.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 8 / 2, halfTileSize))); // Floor 3:0
+	physics->AddCollider(new Box(13 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 1 / 2, halfTileSize))); // Floor 3:1
+	physics->AddCollider(new Box(17 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 1 / 2, halfTileSize))); // Floor 3:2
+	physics->AddCollider(new Box(21 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 3 / 2, halfTileSize))); // Floor 3:3
+
+	physics->AddCollider(new Box(2.5 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 4 / 2, halfTileSize))); // Floor 4:0
+	physics->AddCollider(new Box(7 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 1 / 2, halfTileSize))); // Floor 4:1
+	physics->AddCollider(new Box(19 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 13 / 2, halfTileSize))); // Floor 4:2
+	physics->AddCollider(new Box(28 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 1 / 2, halfTileSize))); // Floor 4:3
+
+	// Ladder Tops
+	physics->AddCollider(new Box(6.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 1:0
+	physics->AddCollider(new Box(15.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 1:1
+
+	physics->AddCollider(new Box(22.5 * tileSize + halfTileSize, 8 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 2:0
+
+	physics->AddCollider(new Box(1.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 3:0
+	physics->AddCollider(new Box(11.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 3:1
+	physics->AddCollider(new Box(18.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 3:2
+
+	physics->AddCollider(new Box(5.5 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 4:0
+	physics->AddCollider(new Box(26.5 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 4:1
+
+
+	// Ladder Mid & bottom
+	physics->AddCollider(new Box(6.5 * tileSize + halfTileSize, 2 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 1:0
+	physics->AddCollider(new Box(15.5 * tileSize + halfTileSize, 2 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 1:1
+
+	physics->AddCollider(new Box(22.5 * tileSize + halfTileSize, 6 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 2:0
+
+	physics->AddCollider(new Box(1.5 * tileSize + halfTileSize, 8 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 7 * halfTileSize))); // Floor 3:0
+	physics->AddCollider(new Box(11.5 * tileSize + halfTileSize, 10 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 3:1
+	physics->AddCollider(new Box(18.5 * tileSize + halfTileSize, 10 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 3:2
+
+	physics->AddCollider(new Box(5.5 * tileSize + halfTileSize, 14 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 4:0
+	physics->AddCollider(new Box(26.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 7 * halfTileSize))); // Floor 4:1
+}
+
+float FruitWizardGame::RandomNumber(float Min, float Max)
+{
+	return ((float(rand()) / float(RAND_MAX)) * (Max - Min)) + Min;
 }

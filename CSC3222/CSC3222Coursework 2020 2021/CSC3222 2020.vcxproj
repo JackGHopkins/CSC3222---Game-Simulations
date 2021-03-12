@@ -156,12 +156,13 @@
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="GameSimsPhysics.cpp" />
     <ClCompile Include="GameSimsRenderer.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="Spell.cpp" />
     <ClCompile Include="PlayerCharacter.cpp" />
     <ClCompile Include="RigidBody.cpp" />
     <ClCompile Include="FruitWizardGame.cpp" />
     <ClCompile Include="SimObject.cpp" />
-    <ClCompile Include="Square.cpp" />
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -176,12 +177,13 @@
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="GameSimsPhysics.h" />
     <ClInclude Include="GameSimsRenderer.h" />
+    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Spell.h" />
     <ClInclude Include="PlayerCharacter.h" />
     <ClInclude Include="RigidBody.h" />
     <ClInclude Include="FruitWizardGame.h" />
     <ClInclude Include="SimObject.h" />
-    <ClInclude Include="Square.h" />
+    <ClInclude Include="Box.h" />
     <ClInclude Include="TextureManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -29,9 +29,11 @@ Vector4 explodeFrames[] = {
 };
 
 Spell::Spell(Vector2 direction) : SimObject()	{
-	texture		= texManager->GetTexture("FruitWizard\\mini_fantasy_sprites_oga_ver.png");
-	velocity	= direction;
-	animFrameCount = 6;
+	texture				= texManager->GetTexture("FruitWizard\\mini_fantasy_sprites_oga_ver.png");
+	velocity			= direction;
+	animFrameCount		= 6;
+	this->time			= 0;
+	inverseMass			= 0.01;
 }
 
 Spell::~Spell()	{
@@ -48,11 +50,18 @@ bool Spell::UpdateObject(float dt) {
 	animFrameData = explodeFrames[currentanimFrame];
 
 	int fps = 60;
-	int timeLimit = 3 * fps;
+	int timeLimit = 3 * fps; // seconds * fps = total frames
 	time++;
 
-	//if (time * fps > timeLimit)
-	//	delete this;
+	if (this->time > timeLimit) {
+		std::cout << "Del Spell" << std::endl;
+		return false;
+	}
 
 	return true;
+}
+
+void Spell::InitMovement() {
+	//AddForce(Vector2(100, 0) / inverseMass);
+	AddForce(this->GetVelocity() / inverseMass * 2000);
 }

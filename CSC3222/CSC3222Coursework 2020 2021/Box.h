@@ -9,11 +9,13 @@ using namespace NCL::Maths;
 /// <summary>
 ///		Class for the Square Shape.
 /// </summary>
-class Square : public CollisionVolume {
+class Box : public CollisionVolume {
 public:
 	/* CONSTRUCTOR & DESTRUCTOR */
-	Square(float posX, float posY, SimObject* object,  Vector2 length);
-	~Square();
+	Box();
+	Box(float posX, float posY, SimObject* object, Vector2 halfLength);
+	Box(float posX, float posY, Vector2 halfLength);
+	~Box();
 
 	/* METHODS */
 	Vector2 GetHalfLength() const;

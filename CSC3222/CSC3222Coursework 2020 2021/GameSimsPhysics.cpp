@@ -1,6 +1,7 @@
 #include "GameSimsPhysics.h"
 #include "RigidBody.h"
 #include "CollisionVolume.h"
+#include "QuadTree.h"
 #include "../../Common/Vector2.h"
 
 using namespace NCL;
@@ -72,12 +73,33 @@ void GameSimsPhysics::IntegrationVelocity(float dt) {
 }
 
 void GameSimsPhysics::CollisionDetection(float dt) {
-	int size = allColliders.size();
-	for (int i = 0; i < size; i++) {
-		for (int j = i + 1; j < size; j++) {
+	QuadTree quadTree = QuadTree(0, Box(0, 0, Vector2(480, 320)));
 
-			if (allColliders[i]->CheckCollision(*allColliders[j]))
-				std::cout << "Collision between: [" << allColliders[i] << "," << allColliders[j] << "]" << std::endl;
+	quadTree.Clear();
+
+	for (int i = 0; i < allColliders.size(); i++)
+		quadTree.Insert(allColliders[i]);
+
+	std::vector<CollisionVolume*> retrievedObjects;
+	for (int i = 0; i < allColliders.size(); i++) {
+		retrievedObjects.clear();
+		retrievedObjects = quadTree.RetrieveObjects(retrievedObjects, allColliders[i]);
+		
+		for (int j = 0; j < retrievedObjects.size(); j++) {
+			for (int k = j + 1; k < retrievedObjects.size(); k++) {
+				if (retrievedObjects[j]->CheckCollision(*retrievedObjects[k]))
+					std::cout << "Collision between: [" << allColliders[i] << "," << allColliders[j] << "]" << std::endl;
+			}
 		}
 	}
+
+
+	//int size = allColliders.size();
+	//for (int i = 0; i < size; i++) {
+	//	for (int j = i + 1; j < size; j++) {
+
+	//		if (allColliders[i]->CheckCollision(*allColliders[j]))
+	//			std::cout << "Collision between: [" << allColliders[i] << "," << allColliders[j] << "]" << std::endl;
+	//	}
+	//}
 }

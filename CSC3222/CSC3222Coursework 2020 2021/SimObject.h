@@ -37,6 +37,8 @@ namespace NCL {
 
 			static void InitObjects(FruitWizardGame* game, TextureManager* manager);
 
+			Vector2 SpringMovement(SimObject* parentObject, float minDist, float maxDist, float maxVel);
+
 		protected:
 
 			CollisionVolume*		collider;
