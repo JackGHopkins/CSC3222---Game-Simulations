@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "CollisionCouple.h"
 #include "../../Common/Vector2.h"
 
 namespace NCL {
@@ -21,13 +22,17 @@ namespace NCL {
 			void UpdateCollider(CollisionVolume* c);
 			void RemoveCollider(CollisionVolume* c);
 
+			void DeleteCollisions();
+
 		protected:
 			void IntegrationAcceleration(float dt);
 			void IntegrationVelocity(float dt);
-			void CollisionDetection(float dt);
+			void CollisionDetection();
+			void CollisionResolution(float dt);
 
 			std::vector<RigidBody*>			allBodies;
 			std::vector<CollisionVolume*>	allColliders;
+			std::vector<CollisionCouple*>	allCollisions;
 		};
 	}
 }

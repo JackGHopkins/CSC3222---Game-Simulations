@@ -1,5 +1,6 @@
 #include "GameSimsPhysics.h"
 #include "RigidBody.h"
+#include "CollisionCouple.h"
 #include "CollisionVolume.h"
 #include "QuadTree.h"
 #include "../../Common/Vector2.h"
@@ -17,7 +18,8 @@ GameSimsPhysics::~GameSimsPhysics()	{
 
 void GameSimsPhysics::Update(float dt) {
 	IntegrationAcceleration(dt);
-	CollisionDetection(dt);
+	CollisionDetection();
+	CollisionResolution(dt);
 	IntegrationVelocity(dt);
 
 	for (auto it : allBodies) {
@@ -58,6 +60,13 @@ void GameSimsPhysics::RemoveCollider(CollisionVolume* c) {
 	}
 }
 
+void GameSimsPhysics::DeleteCollisions() {
+	for (int i = 0; i < allCollisions.size(); i++) {
+		delete allCollisions[i];
+	} 
+	allCollisions.clear();
+}
+
 void GameSimsPhysics::IntegrationAcceleration(float dt) {
 	for (auto i : allBodies) {
 		Vector2 accleration = i->force * i->inverseMass;
@@ -68,11 +77,12 @@ void GameSimsPhysics::IntegrationAcceleration(float dt) {
 void GameSimsPhysics::IntegrationVelocity(float dt) {
 	for (auto i : allBodies) {
 		i->position = i->position + i->velocity;
-		i->velocity *= 0.6;
+		i->velocity *= 0.9 * dt;
 	}
 }
 
-void GameSimsPhysics::CollisionDetection(float dt) {
+void GameSimsPhysics::CollisionDetection() {
+	int k = 0;
 	QuadTree quadTree = QuadTree(0, Box(0, 0, Vector2(480, 320)));
 
 	quadTree.Clear();
@@ -84,14 +94,34 @@ void GameSimsPhysics::CollisionDetection(float dt) {
 	for (int i = 0; i < allColliders.size(); i++) {
 		retrievedObjects.clear();
 		retrievedObjects = quadTree.RetrieveObjects(retrievedObjects, allColliders[i]);
-		
+
 		for (int j = 0; j < retrievedObjects.size(); j++) {
 			for (int k = j + 1; k < retrievedObjects.size(); k++) {
-				if (retrievedObjects[j]->CheckCollision(*retrievedObjects[k]))
+				if (retrievedObjects[j]->CheckCollision(*retrievedObjects[k])) {
 					std::cout << "Collision between: [" << allColliders[i] << "," << allColliders[j] << "]" << std::endl;
+					allCollisions[k] = new CollisionCouple(allColliders[i], allColliders[j], allBodies[i], allBodies[j], );
+				}
 			}
 		}
 	}
+}
+
+void GameSimsPhysics::CollisionResolution(float dt) {
+	// Impluse();
+	/*
+	
+				-(1+e) * (v1 - v2) * Normalised Collision Pair
+			J =	______________________________________________
+				(inverse mass A * invers mass B)
+
+		vA = vA - inverse mA * J * normalised Collision Pair
+		vB = vB - inverse mB * J * normalised Collision Pair
+
+	*/
+	
+
+
+}
 
 
 	//int size = allColliders.size();

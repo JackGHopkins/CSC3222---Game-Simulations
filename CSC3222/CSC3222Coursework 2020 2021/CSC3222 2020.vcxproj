@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClCompile Include="Circle.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="CollisionCouple.cpp" />
     <ClCompile Include="Froggo.cpp" />
     <ClCompile Include="Guard.cpp" />
     <ClCompile Include="Pixie.cpp" />
@@ -168,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="CollisionCouple.h" />
     <ClInclude Include="Froggo.h" />
     <ClInclude Include="Guard.h" />
     <ClInclude Include="Pixie.h" />
