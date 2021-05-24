@@ -19,7 +19,7 @@ GameSimsPhysics::~GameSimsPhysics()	{
 void GameSimsPhysics::Update(float dt) {
 	IntegrationAcceleration(dt);
 	CollisionDetection();
-	CollisionResolution(dt);
+	CollisionResolution();
 	IntegrationVelocity(dt);
 
 	for (auto it : allBodies) {
@@ -96,31 +96,49 @@ void GameSimsPhysics::CollisionDetection() {
 		retrievedObjects = quadTree.RetrieveObjects(retrievedObjects, allColliders[i]);
 
 		for (int j = 0; j < retrievedObjects.size(); j++) {
-			for (int k = j + 1; k < retrievedObjects.size(); k++) {
-				if (retrievedObjects[j]->CheckCollision(*retrievedObjects[k])) {
-					std::cout << "Collision between: [" << allColliders[i] << "," << allColliders[j] << "]" << std::endl;
-					allCollisions[k] = new CollisionCouple(allColliders[i], allColliders[j], allBodies[i], allBodies[j], );
-				}
+			if (retrievedObjects[j]->CheckCollision(*retrievedObjects[k])) {
+				std::cout << "Collision between: [" << allColliders[i] << "," << allColliders[j] << "]" << std::endl;
+				allCollisions.push_back(new CollisionCouple(allColliders[i], allColliders[j]));
 			}
 		}
 	}
 }
 
-void GameSimsPhysics::CollisionResolution(float dt) {
-	// Impluse();
-	/*
-	
-				-(1+e) * (v1 - v2) * Normalised Collision Pair
-			J =	______________________________________________
-				(inverse mass A * invers mass B)
+void GameSimsPhysics::CollisionResolution() {
+	for (CollisionCouple* i : allCollisions) {
+		CollisionResponse(i->cV1, i->cV2, i->collisionNormal, i->penDistance);
+	}
+}
 
-		vA = vA - inverse mA * J * normalised Collision Pair
-		vB = vB - inverse mB * J * normalised Collision Pair
+void GameSimsPhysics::CollisionResponse(CollisionVolume* cV1, CollisionVolume* cV2, Vector2 collisionNormal, float penDistance) {
+	Vector2 cV1Vel = (cV1->GetObject() != NULL) ? cV1->GetObject()->GetVelocity() : Vector2(0.0f, 0.0f);
+	Vector2 cV2Vel = (cV2->GetObject() != NULL) ? cV2->GetObject()->GetVelocity() : Vector2(0.0f, 0.0f);
+	Vector2 deltaVel = cV1Vel - cV2Vel;
 
-	*/
-	
+	if (!cV1->GetObject()) 
+	{
+		cV2->GetObject()->GetPosition() += collisionNormal * penDistance;
+		cV2->GetObject()->AddImpluse(-deltaVel, collisionNormal, 0.0f);
+	}
+	else if (!cV2->GetObject())
+	{
+		cV1->GetObject()->GetPosition() += collisionNormal * penDistance;
+		cV1->GetObject()->AddImpluse(deltaVel, collisionNormal, 0.0f);
+	}
+	else
+	{
+		float cV1IM = cV1->GetObject()->GetInverseMass();
+		float cV2IM = cV2->GetObject()->GetInverseMass();
 
+		cV1->GetObject()->SetPosition(cV1->GetObject()->GetPosition() - collisionNormal * penDistance * (cV1IM / (cV1IM + cV2IM)));
+		cV2->GetObject()->SetPosition(cV2->GetObject()->GetPosition() - collisionNormal * penDistance * (cV2IM / (cV1IM + cV2IM)));
 
+		cV1->GetObject()->AddProjection(collisionNormal, penDistance, cV2->GetObject()->GetInverseMass());
+		cV1->GetObject()->AddImpluse(deltaVel, collisionNormal, cV2->GetObject()->GetInverseMass());
+
+		cV2->GetObject()->AddProjection(collisionNormal, penDistance, cV1->GetObject()->GetInverseMass());
+		cV2->GetObject()->AddImpluse(deltaVel, collisionNormal, cV1->GetObject()->GetInverseMass());
+	}
 }
 
 
@@ -132,4 +150,3 @@ void GameSimsPhysics::CollisionResolution(float dt) {
 	//			std::cout << "Collision between: [" << allColliders[i] << "," << allColliders[j] << "]" << std::endl;
 	//	}
 	//}
-}

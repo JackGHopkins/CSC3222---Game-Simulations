@@ -27,7 +27,9 @@ namespace NCL {
 			/* METHODS */
 			float GetPosX() const;
 			float GetPosY() const;
+			Vector2 GetPosition() const;
 			Vector2 GetHalfLength() const;
+			SimObject* GetObject() const;
 			void SetPosX(const float x);
 			void SetPosY(const float y);
 			void SetHalfLength(const Vector2 halfLength);

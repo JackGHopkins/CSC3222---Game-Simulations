@@ -1,12 +1,12 @@
 #pragma once
 #include <vector>
-#include "CollisionCouple.h"
 #include "../../Common/Vector2.h"
 
 namespace NCL {
 	namespace CSC3222 {
 		class RigidBody;
 		class CollisionVolume;
+		class CollisionCouple;
 
 		class GameSimsPhysics	{
 		public:
@@ -28,7 +28,8 @@ namespace NCL {
 			void IntegrationAcceleration(float dt);
 			void IntegrationVelocity(float dt);
 			void CollisionDetection();
-			void CollisionResolution(float dt);
+			void CollisionResolution();
+			void CollisionResponse(CollisionVolume* cV1, CollisionVolume* cV2, NCL::Maths::Vector2 collisionNormal, float penDistance);
 
 			std::vector<RigidBody*>			allBodies;
 			std::vector<CollisionVolume*>	allColliders;

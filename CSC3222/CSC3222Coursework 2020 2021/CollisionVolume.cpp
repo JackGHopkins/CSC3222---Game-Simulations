@@ -34,6 +34,17 @@ float CollisionVolume::GetPosY() const {
 		return posY;
 }
 
+Vector2 CollisionVolume::GetPosition() const {
+	if (object)
+		return object->GetPosition();
+	else
+		return Vector2(posX, posY);
+}
+
+SimObject* CollisionVolume::GetObject() const {
+	return object;
+}
+
 Vector2 CollisionVolume::GetHalfLength() const { return halfLength; }
 
 void CollisionVolume::SetPosX(float x) { this->posX = x; }

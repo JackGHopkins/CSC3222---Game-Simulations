@@ -5,18 +5,22 @@
 #include "QuadTree.h"
 #include "../../Common/Vector2.h"
 
-struct CollisionCouple {
+/// <summary>
+///		Storing information about the collisions.
+/// </summary>
+namespace NCL {
+	namespace CSC3222 {
+		struct CollisionCouple {
 
-	CollisionCouple(float penDistance, RigidBody* rB1, RigidBody* rB2, CollisionVolume* cV1, CollisionVolume* cV2, Vector2 collisionNormal);
-	~CollisionCouple();
+			CollisionCouple(CollisionVolume* cV1, CollisionVolume* cV2);
+			~CollisionCouple();
 
-	float FindPenDist(RigidBody* rB1, RigidBody* rB2);
-	Vector2 CollisionNormal(RigidBody * rB1, RigidBody * rB2);
+			void FindParameters(CollisionVolume* cV1, CollisionVolume* cV2);
 
-	float penDistance;
-	RigidBody* rB1;
-	RigidBody* rB2;
-	CollisionVolume* cV1;
-	CollisionVolume* cV2;
-	Vector2 collisionNormal;
-};
+			float penDistance;
+			CollisionVolume* cV1;
+			CollisionVolume* cV2;
+			Vector2 collisionNormal;
+		};
+	}
+}
