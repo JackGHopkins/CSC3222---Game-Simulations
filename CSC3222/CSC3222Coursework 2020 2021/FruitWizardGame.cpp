@@ -118,6 +118,10 @@ void FruitWizardGame::Update(float dt) {
 			else {
 				obj->SetVelocity(Vector2(obj->GetVelocity().x, 0.0f));
 			}
+
+			if (player->GetCollider()->GetCollisionState() == CollisionVolume::climb) {
+
+			}
 		}
 	}
 
@@ -138,7 +142,7 @@ void FruitWizardGame::InitialiseGame() {
 	renderer->SetScreenProperties(16, currentMap->GetMapWidth(), currentMap->GetMapHeight());
 
 	player = new PlayerCharacter();
-	player->SetPosition(Vector2(150, 300));
+	player->SetPosition(Vector2(110, 100));
 	AddNewObject(player);
 
 	/*testGuard = new Guard();

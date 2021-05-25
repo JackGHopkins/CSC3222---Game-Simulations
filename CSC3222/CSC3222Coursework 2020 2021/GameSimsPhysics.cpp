@@ -102,23 +102,21 @@ void GameSimsPhysics::CollisionDetection() {
 				std::cout << "Collision between: [" << allColliders[i]->GetName() << "," << allColliders[j]->GetName() << "]" << std::endl;
 				allCollisions.push_back(new CollisionCouple(allColliders[i], allColliders[j]));
 
-				if (retrievedObjects[i]->GetObject() && retrievedObjects[j]->GetObject()) {
+				// Change state to grounded if touching the floor
+				if (allColliders[i]->GetCollisionState() == CollisionVolume::COLLISION_STATE::floor && allColliders[j]->GetCollisionState() == CollisionVolume::COLLISION_STATE::airborn)
+					allColliders[j]->SetCollisionState(CollisionVolume::COLLISION_STATE::grounded);
 
-					// Change state to grounded if touching the floor
-					if (allColliders[i]->GetCollisionState() == CollisionVolume::COLLISION_STATE::floor && allColliders[j]->GetCollisionState() == CollisionVolume::COLLISION_STATE::airborn)
-						allColliders[j]->SetCollisionState(CollisionVolume::COLLISION_STATE::grounded);
+				if (allColliders[i]->GetCollisionState() == CollisionVolume::COLLISION_STATE::airborn && allColliders[j]->GetCollisionState() == CollisionVolume::COLLISION_STATE::floor)
+					allColliders[i]->SetCollisionState(CollisionVolume::COLLISION_STATE::grounded);
 
-					if (allColliders[i]->GetCollisionState() == CollisionVolume::COLLISION_STATE::airborn && allColliders[j]->GetCollisionState() == CollisionVolume::COLLISION_STATE::floor)
-						allColliders[i]->SetCollisionState(CollisionVolume::COLLISION_STATE::grounded);
+				// Change state to grounded if touching the floor
+				if (allColliders[i]->GetCollisionState() == CollisionVolume::COLLISION_STATE::ladder)
+					allColliders[j]->SetCollisionState(CollisionVolume::COLLISION_STATE::climb);
 
-					// Change state to grounded if touching the floor
-					if (allColliders[i]->GetCollisionState() == CollisionVolume::COLLISION_STATE::ladder)
-						allColliders[j]->SetCollisionState(CollisionVolume::COLLISION_STATE::climb);
+				if (allColliders[j]->GetCollisionState() == CollisionVolume::COLLISION_STATE::ladder)
+					allColliders[i]->SetCollisionState(CollisionVolume::COLLISION_STATE::climb);
 
-					if (allColliders[j]->GetCollisionState() == CollisionVolume::COLLISION_STATE::ladder)
-						allColliders[i]->SetCollisionState(CollisionVolume::COLLISION_STATE::climb);
 
-				}
 			}
 		}
 	}
