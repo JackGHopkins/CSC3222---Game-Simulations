@@ -2,6 +2,7 @@
 #include "TextureManager.h"
 #include "../../Common/Window.h"
 #include "GameSimsRenderer.h"
+#include "Box.h"
 
 using namespace NCL;
 using namespace CSC3222;
@@ -66,6 +67,9 @@ PlayerCharacter::PlayerCharacter() : SimObject() {
 	texture				= texManager->GetTexture("FruitWizard\\mini_fantasy_sprites_oga_ver.png");
 	animFrameCount		= 6;
 	inverseMass			= 0.1;
+
+	if (this)
+		SetCollider(new Box("Player", this->GetPosition().x, (this->GetPosition().y), this, Vector2(10,16), CollisionVolume::COLLISION_STATE::airborn));
 }
 
 PlayerCharacter::~PlayerCharacter() {

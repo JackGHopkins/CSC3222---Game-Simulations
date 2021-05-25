@@ -2,7 +2,7 @@
 #include <vector>
 
 namespace NCL::CSC3222 {
-	class Collision;
+	class CollisionVolume;
 	class GameMap;
 	class SimObject;
 	class GameSimsRenderer;
@@ -46,6 +46,6 @@ namespace NCL::CSC3222 {
 
 		std::vector<SimObject*> gameObjects;
 		std::vector<SimObject*> newObjects;
-		std::vector<Collision*> allColliders;
+		std::vector<CollisionVolume*> allColliders;
 	};
 }

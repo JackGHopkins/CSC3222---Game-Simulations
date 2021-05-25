@@ -1,6 +1,7 @@
 #include "Spell.h"
 #include "TextureManager.h"
 #include "GameSimsRenderer.h"
+#include "Circle.h"
 
 #include "../../Common/Maths.h"
 
@@ -28,12 +29,15 @@ Vector4 explodeFrames[] = {
 	Vector4(512,416, 32, 32),	
 };
 
-Spell::Spell(Vector2 direction) : SimObject()	{
-	texture				= texManager->GetTexture("FruitWizard\\mini_fantasy_sprites_oga_ver.png");
-	velocity			= direction;
-	animFrameCount		= 6;
-	this->time			= 0;
-	inverseMass			= 0.01;
+Spell::Spell(Vector2 direction) : SimObject() {
+	texture			= texManager->GetTexture("FruitWizard\\mini_fantasy_sprites_oga_ver.png");
+	velocity		= direction;
+	animFrameCount	= 6;
+	this->time		= 0;
+	inverseMass		= 0.01;
+
+	if (this)
+		SetCollider(new Circle("Spell", this->GetPosition().x, this->GetPosition().y, this, 5, CollisionVolume::COLLISION_STATE::null));
 }
 
 Spell::~Spell()	{
@@ -48,6 +52,7 @@ void Spell::DrawObject(GameSimsRenderer &r) {
 
 bool Spell::UpdateObject(float dt) {
 	animFrameData = explodeFrames[currentanimFrame];
+	SetCollider(new Circle("Spell", this->GetPosition().x, this->GetPosition().y, this, 5, CollisionVolume::COLLISION_STATE::null));
 
 	int fps = 60;
 	int timeLimit = 3 * fps; // seconds * fps = total frames
@@ -62,6 +67,6 @@ bool Spell::UpdateObject(float dt) {
 }
 
 void Spell::InitMovement() {
-	//AddForce(Vector2(100, 0) / inverseMass);
-	AddForce(this->GetVelocity() / inverseMass * 2000);
+	AddForce(Vector2(100, 0) / inverseMass);
+	//AddForce(this->GetVelocity() / inverseMass * 2000);
 }

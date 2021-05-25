@@ -19,14 +19,16 @@ bool Collision::isCollision(Circle& c1, Circle& c2)
 */
 bool Collision::isCollision(Box& s1, Box& s2)
 {
-	if (s1.GetPosX() < s2.GetPosX() + (s2.GetHalfLength().x) &&	// Checks if s1 is right of s2's left side.    
-		s1.GetPosX() + (s1.GetHalfLength().x) > s2.GetPosX() &&	// Checks if s1 is left of s2's right side.  
-		s1.GetPosY() < s2.GetPosY() + (s2.GetHalfLength().y) &&	// Checks if s1 is below of s2's top.  
-		s1.GetPosY() + (s1.GetHalfLength().y) > s2.GetPosY())		// Checks if s1 is above of s2's bottom.  
+	float s1HalfW = s1.GetHalfLength().x;
+	float s1HalfH = s1.GetHalfLength().y;
+	float s2HalfW = s2.GetHalfLength().x;
+	float s2HalfH = s2.GetHalfLength().y;
+
+	if((s1HalfW + s2HalfW) > abs(s1.GetPosition().x - s2.GetPosition().x) &&	// Check if Within X bounds of each other
+		(s1HalfH + s2HalfH) > abs(s1.GetPosition().y - s2.GetPosition().y))		// Check if Within Y bounds of each other
 		return true;
 	else
 		return false;
-
 }
 
 /*

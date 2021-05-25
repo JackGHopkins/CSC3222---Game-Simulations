@@ -14,6 +14,12 @@ namespace NCL {
 	namespace CSC3222 {
 		class CollisionVolume {
 		public:
+			enum BOUND_TYPE 
+			{
+				box,
+				circle,
+			};
+
 			enum COLLISION_STATE
 			{
 				null,
@@ -22,12 +28,14 @@ namespace NCL {
 				floor,
 				wall,
 				ladder,
+				climb,
 			};
 			/* CONSTRUCTORS & DECONSTRUCTORS */
 			CollisionVolume();
-			CollisionVolume(std::string name, float posX, float posY, Vector2 halfLength, SimObject* object, COLLISION_STATE collisionState);
-			CollisionVolume(std::string name, float posX, float posY, Vector2 halfLength, COLLISION_STATE collisionState);
-			CollisionVolume(std::string name, float posX, float posY, Vector2 halfLength, SimObject* object);
+			CollisionVolume(std::string name, BOUND_TYPE boundType, float posX, float posY, Vector2 halfLength, SimObject* object, COLLISION_STATE collisionState);
+			CollisionVolume(std::string name, BOUND_TYPE boundType, float posX, float posY, Vector2 halfLength, COLLISION_STATE collisionState);
+			CollisionVolume(std::string name, BOUND_TYPE boundType, float posX, float posY, Vector2 halfLength, SimObject* object);
+			CollisionVolume(std::string name, BOUND_TYPE boundType, float posX, float posY, Vector2 halfLength);
 			~CollisionVolume();
 
 			/* ABSTRACT METHOD */
@@ -41,6 +49,7 @@ namespace NCL {
 			Vector2 GetHalfLength() const;
 			SimObject* GetObject() const;
 			COLLISION_STATE GetCollisionState() const;
+			BOUND_TYPE GetBoundType() const;
 			void SetPosX(const float x);
 			void SetPosY(const float y);
 			void SetHalfLength(const Vector2 halfLength);
@@ -49,6 +58,7 @@ namespace NCL {
 
 		private:
 			std::string name;
+			BOUND_TYPE boundType;
 			float posX, posY;
 			Vector2 halfLength;
 			SimObject* object;

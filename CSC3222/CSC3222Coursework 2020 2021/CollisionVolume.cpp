@@ -4,8 +4,9 @@ using namespace NCL::Maths;
 
 CollisionVolume::CollisionVolume() {}
 
-CollisionVolume::CollisionVolume(std::string name, float posX, float posY, Vector2 halfLength, SimObject* object, COLLISION_STATE collisionState) :
+CollisionVolume::CollisionVolume(std::string name, BOUND_TYPE boundType, float posX, float posY, Vector2 halfLength, SimObject* object, COLLISION_STATE collisionState) :
 	name(name),
+	boundType(boundType),
 	posX(posX),
 	posY(posY),
 	halfLength(halfLength),
@@ -14,20 +15,30 @@ CollisionVolume::CollisionVolume(std::string name, float posX, float posY, Vecto
 
 
 // Copy Constructor
-CollisionVolume::CollisionVolume(std::string name, float posX, float posY, Vector2 halfLength, COLLISION_STATE collisionState) :
+CollisionVolume::CollisionVolume(std::string name, BOUND_TYPE boundType, float posX, float posY, Vector2 halfLength, COLLISION_STATE collisionState) :
 	name(name),
+	boundType(boundType),
 	posX(posX),
 	posY(posY),
 	halfLength(halfLength),
 	collisionState(collisionState) {};
 
 // Constructor for when you don't want to update the collisionState
-CollisionVolume::CollisionVolume(std::string name, float posX, float posY, Vector2 halfLength, SimObject* object) :
+CollisionVolume::CollisionVolume(std::string name, BOUND_TYPE boundType, float posX, float posY, Vector2 halfLength, SimObject* object) :
 	name(name),
+	boundType(boundType),
 	posX(posX),
 	posY(posY),
 	halfLength(halfLength),
 	object(object) {};
+
+// Constructor for when you don't want to update the collisionState
+CollisionVolume::CollisionVolume(std::string name, BOUND_TYPE boundType, float posX, float posY, Vector2 halfLength) :
+	name(name),
+	boundType(boundType),
+	posX(posX),
+	posY(posY),
+	halfLength(halfLength) {};
 
 
 
@@ -60,6 +71,10 @@ SimObject* CollisionVolume::GetObject() const {
 
 std::string CollisionVolume::GetName() const {
 	return name;
+}
+
+CollisionVolume::BOUND_TYPE CollisionVolume::GetBoundType() const {
+	return boundType;
 }
 
 CollisionVolume::COLLISION_STATE CollisionVolume::GetCollisionState() const {
