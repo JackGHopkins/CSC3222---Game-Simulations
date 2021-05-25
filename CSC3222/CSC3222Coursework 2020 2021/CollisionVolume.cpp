@@ -1,22 +1,35 @@
 #include "CollisionVolume.h"
-
 using namespace NCL::CSC3222;
 using namespace NCL::Maths;
 
 CollisionVolume::CollisionVolume() {}
 
-CollisionVolume::CollisionVolume(float posX, float posY, Vector2 halfLength, SimObject* object) :
+CollisionVolume::CollisionVolume(std::string name, float posX, float posY, Vector2 halfLength, SimObject* object, COLLISION_STATE collisionState) :
+	name(name),
+	posX(posX),
+	posY(posY),
+	halfLength(halfLength),
+	object(object), 
+	collisionState(collisionState) {};
+
+
+// Copy Constructor
+CollisionVolume::CollisionVolume(std::string name, float posX, float posY, Vector2 halfLength, COLLISION_STATE collisionState) :
+	name(name),
+	posX(posX),
+	posY(posY),
+	halfLength(halfLength),
+	collisionState(collisionState) {};
+
+// Constructor for when you don't want to update the collisionState
+CollisionVolume::CollisionVolume(std::string name, float posX, float posY, Vector2 halfLength, SimObject* object) :
+	name(name),
 	posX(posX),
 	posY(posY),
 	halfLength(halfLength),
 	object(object) {};
 
 
-// Copy Constructor
-CollisionVolume::CollisionVolume(float posX, float posY, Vector2 halfLength) :
-	posX(posX),
-	posY(posY), 
-	halfLength(halfLength) {};
 
 CollisionVolume::~CollisionVolume() {}
 
@@ -45,6 +58,14 @@ SimObject* CollisionVolume::GetObject() const {
 	return object;
 }
 
+std::string CollisionVolume::GetName() const {
+	return name;
+}
+
+CollisionVolume::COLLISION_STATE CollisionVolume::GetCollisionState() const {
+	return collisionState;
+}
+
 Vector2 CollisionVolume::GetHalfLength() const { return halfLength; }
 
 void CollisionVolume::SetPosX(float x) { this->posX = x; }
@@ -58,3 +79,5 @@ void CollisionVolume::Transform(float newX, float newY) {
 	this->SetPosX(newX);
 	this->SetPosY(newY);
 }
+
+void CollisionVolume::SetCollisionState(const CollisionVolume::COLLISION_STATE collisionState) { this->collisionState = collisionState; }

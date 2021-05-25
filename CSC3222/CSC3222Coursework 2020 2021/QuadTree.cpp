@@ -36,10 +36,10 @@ void QuadTree::Split(){
 	int x = (int)boundArea.GetPosX();
 	int y = (int)boundArea.GetPosY();
 
-	nodeVector[0] = &QuadTree(depth + 1, Box(x + divideWidth, y + divideHeight, Vector2(divideWidth, divideHeight)));
-	nodeVector[1] = &QuadTree(depth + 1, Box(x + divideWidth, y - divideHeight, Vector2(divideWidth, divideHeight)));
-	nodeVector[2] = &QuadTree(depth + 1, Box(x - divideWidth, y + divideHeight, Vector2(divideWidth, divideHeight)));
-	nodeVector[3] = &QuadTree(depth + 1, Box(x - divideWidth, y - divideHeight, Vector2(divideWidth, divideHeight)));
+	nodeVector[0] = &QuadTree(depth + 1, Box("quadB", x + divideWidth, y + divideHeight, Vector2(divideWidth, divideHeight), CollisionVolume::COLLISION_STATE::null));
+	nodeVector[1] = &QuadTree(depth + 1, Box("quadB", x + divideWidth, y - divideHeight, Vector2(divideWidth, divideHeight), CollisionVolume::COLLISION_STATE::null));
+	nodeVector[2] = &QuadTree(depth + 1, Box("quadB", x - divideWidth, y + divideHeight, Vector2(divideWidth, divideHeight), CollisionVolume::COLLISION_STATE::null));
+	nodeVector[3] = &QuadTree(depth + 1, Box("quadB", x - divideWidth, y - divideHeight, Vector2(divideWidth, divideHeight), CollisionVolume::COLLISION_STATE::null));
 }
 
 /*

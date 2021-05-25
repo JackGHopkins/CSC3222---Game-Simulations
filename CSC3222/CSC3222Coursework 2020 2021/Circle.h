@@ -11,7 +11,8 @@ using namespace NCL::CSC3222;
 class Circle : public CollisionVolume {
 public:
 	/* CONSTRUCTORS & DESTRUCTORS*/
-	Circle(float posX, float posY, SimObject* object, float radius);
+	Circle(std::string name, float posX, float posY, SimObject* object, float radius, COLLISION_STATE collsionState);
+	Circle(std::string name, float posX, float posY, SimObject* object, float radius);
 	~Circle();
 
 	/* METHODS */

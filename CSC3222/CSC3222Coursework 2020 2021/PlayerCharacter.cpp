@@ -65,7 +65,7 @@ PlayerCharacter::PlayerCharacter() : SimObject() {
 	currentAnimState	= PlayerState::Left;
 	texture				= texManager->GetTexture("FruitWizard\\mini_fantasy_sprites_oga_ver.png");
 	animFrameCount		= 6;
-	inverseMass			= 10;
+	inverseMass			= 0.1;
 }
 
 PlayerCharacter::~PlayerCharacter() {

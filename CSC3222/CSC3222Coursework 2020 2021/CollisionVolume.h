@@ -12,33 +12,47 @@
 /// </summary>
 namespace NCL {
 	namespace CSC3222 {
-
 		class CollisionVolume {
 		public:
+			enum COLLISION_STATE
+			{
+				null,
+				airborn,
+				grounded,
+				floor,
+				wall,
+				ladder,
+			};
 			/* CONSTRUCTORS & DECONSTRUCTORS */
 			CollisionVolume();
-			CollisionVolume(float posX, float posY, Vector2 halfLength, SimObject* object);
-			CollisionVolume(float posX, float posY, Vector2 halfLength);
+			CollisionVolume(std::string name, float posX, float posY, Vector2 halfLength, SimObject* object, COLLISION_STATE collisionState);
+			CollisionVolume(std::string name, float posX, float posY, Vector2 halfLength, COLLISION_STATE collisionState);
+			CollisionVolume(std::string name, float posX, float posY, Vector2 halfLength, SimObject* object);
 			~CollisionVolume();
 
 			/* ABSTRACT METHOD */
 			virtual bool CheckCollision(CollisionVolume& Other) = 0;
 
 			/* METHODS */
+			std::string GetName() const;
 			float GetPosX() const;
 			float GetPosY() const;
 			Vector2 GetPosition() const;
 			Vector2 GetHalfLength() const;
 			SimObject* GetObject() const;
+			COLLISION_STATE GetCollisionState() const;
 			void SetPosX(const float x);
 			void SetPosY(const float y);
 			void SetHalfLength(const Vector2 halfLength);
 			void Transform(float offsetX, float offsetY);
+			void SetCollisionState(const COLLISION_STATE collisionState);
 
 		private:
+			std::string name;
 			float posX, posY;
 			Vector2 halfLength;
 			SimObject* object;
+			COLLISION_STATE collisionState;
 		};
 	}
 }

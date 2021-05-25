@@ -3,8 +3,12 @@
 
 using namespace NCL::CSC3222;
 
-Circle::Circle(float posX, float posY, SimObject* object, float radius) :
-	CollisionVolume(posX, posY, Vector2(radius, radius), object),// minus radius to make the position being in the center, not bottom left. 
+Circle::Circle(std::string name, float posX, float posY, SimObject* object, float radius, COLLISION_STATE collsionState) :
+	CollisionVolume(name, posX, posY, Vector2(radius, radius), object, collsionState),// minus radius to make the position being in the center, not bottom left. 
+	radius(radius) {};
+
+Circle::Circle(std::string name, float posX, float posY, SimObject* object, float radius) :
+	CollisionVolume(name, posX, posY, Vector2(radius, radius), object),// minus radius to make the position being in the center, not bottom left. 
 	radius(radius) {};
 
 Circle::~Circle() {}

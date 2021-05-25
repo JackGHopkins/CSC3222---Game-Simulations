@@ -13,8 +13,9 @@ class Box : public CollisionVolume {
 public:
 	/* CONSTRUCTOR & DESTRUCTOR */
 	Box();
-	Box(float posX, float posY, SimObject* object, Vector2 halfLength);
-	Box(float posX, float posY, Vector2 halfLength);
+	Box(std::string name, float posX, float posY, SimObject* object, Vector2 halfLength, COLLISION_STATE collsionState);
+	Box(std::string name, float posX, float posY, Vector2 halfLength, COLLISION_STATE collsionState);
+	Box(std::string name, float posX, float posY, SimObject* object, Vector2 halfLength);
 	~Box();
 
 	/* METHODS */

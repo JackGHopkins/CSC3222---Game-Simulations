@@ -25,6 +25,8 @@ void GameSimsPhysics::Update(float dt) {
 	for (auto it : allBodies) {
 		it->force = Vector2(0, 0);
 	}
+
+	DeleteCollisions();
 }
 
 void GameSimsPhysics::AddRigidBody(RigidBody* b) {
@@ -83,7 +85,7 @@ void GameSimsPhysics::IntegrationVelocity(float dt) {
 
 void GameSimsPhysics::CollisionDetection() {
 	int k = 0;
-	QuadTree quadTree = QuadTree(0, Box(0, 0, Vector2(480, 320)));
+	QuadTree quadTree = QuadTree(0, Box("MainQuad",0, 0, Vector2(480, 320), CollisionVolume::COLLISION_STATE::null));
 
 	quadTree.Clear();
 
@@ -95,10 +97,18 @@ void GameSimsPhysics::CollisionDetection() {
 		retrievedObjects.clear();
 		retrievedObjects = quadTree.RetrieveObjects(retrievedObjects, allColliders[i]);
 
-		for (int j = 0; j < retrievedObjects.size(); j++) {
-			if (retrievedObjects[j]->CheckCollision(*retrievedObjects[k])) {
-				std::cout << "Collision between: [" << allColliders[i] << "," << allColliders[j] << "]" << std::endl;
+		for (int j = i + 1; j < retrievedObjects.size(); j++) {
+			if (retrievedObjects[j]->CheckCollision(*retrievedObjects[i])) {
+				std::cout << "Collision between: [" << allColliders[i]->GetName() << "," << allColliders[j]->GetName() << "]" << std::endl;
 				allCollisions.push_back(new CollisionCouple(allColliders[i], allColliders[j]));
+
+				// Change state to grounded if touching the floor
+				if (allColliders[i]->GetCollisionState() == CollisionVolume::COLLISION_STATE::floor && allColliders[j]->GetCollisionState() == CollisionVolume::COLLISION_STATE::airborn)
+					allColliders[j]->SetCollisionState(CollisionVolume::COLLISION_STATE::grounded);
+
+				if (allColliders[i]->GetCollisionState() == CollisionVolume::COLLISION_STATE::airborn && allColliders[j]->GetCollisionState() == CollisionVolume::COLLISION_STATE::floor)
+					allColliders[i]->SetCollisionState(CollisionVolume::COLLISION_STATE::grounded);
+					
 			}
 		}
 	}
@@ -115,29 +125,34 @@ void GameSimsPhysics::CollisionResponse(CollisionVolume* cV1, CollisionVolume* c
 	Vector2 cV2Vel = (cV2->GetObject() != NULL) ? cV2->GetObject()->GetVelocity() : Vector2(0.0f, 0.0f);
 	Vector2 deltaVel = cV1Vel - cV2Vel;
 
+	if (!cV1->GetObject() && !cV2->GetObject())
+		return;
+
 	if (!cV1->GetObject()) 
 	{
-		cV2->GetObject()->GetPosition() += collisionNormal * penDistance;
-		cV2->GetObject()->AddImpluse(-deltaVel, collisionNormal, 0.0f);
+		cV2->GetObject()->AddProjection(collisionNormal, penDistance, 0.0f);
+		//cV2->GetObject()->GetPosition() += collisionNormal * penDistance;
+		cV2->GetObject()->AddImpluse(deltaVel, collisionNormal, 0.0f);
 	}
 	else if (!cV2->GetObject())
 	{
-		cV1->GetObject()->GetPosition() += collisionNormal * penDistance;
-		cV1->GetObject()->AddImpluse(deltaVel, collisionNormal, 0.0f);
+		cV1->GetObject()->AddProjection(-collisionNormal, penDistance, 0.0f);
+		//cV1->GetObject()->GetPosition() += collisionNormal * penDistance;
+		cV1->GetObject()->AddImpluse(-deltaVel, collisionNormal, 0.0f);
 	}
-	else
+	else if (cV1->GetObject() && cV2->GetObject())
 	{
 		float cV1IM = cV1->GetObject()->GetInverseMass();
 		float cV2IM = cV2->GetObject()->GetInverseMass();
 
-		cV1->GetObject()->SetPosition(cV1->GetObject()->GetPosition() - collisionNormal * penDistance * (cV1IM / (cV1IM + cV2IM)));
-		cV2->GetObject()->SetPosition(cV2->GetObject()->GetPosition() - collisionNormal * penDistance * (cV2IM / (cV1IM + cV2IM)));
+		//cV1->GetObject()->SetPosition(cV1->GetObject()->GetPosition() - collisionNormal * penDistance * (cV1IM / (cV1IM + cV2IM)));
+		//cV2->GetObject()->SetPosition(cV2->GetObject()->GetPosition() - collisionNormal * penDistance * (cV2IM / (cV1IM + cV2IM)));
 
-		cV1->GetObject()->AddProjection(collisionNormal, penDistance, cV2->GetObject()->GetInverseMass());
+		cV1->GetObject()->AddProjection(-collisionNormal, penDistance, cV2->GetObject()->GetInverseMass());
 		cV1->GetObject()->AddImpluse(deltaVel, collisionNormal, cV2->GetObject()->GetInverseMass());
 
 		cV2->GetObject()->AddProjection(collisionNormal, penDistance, cV1->GetObject()->GetInverseMass());
-		cV2->GetObject()->AddImpluse(deltaVel, collisionNormal, cV1->GetObject()->GetInverseMass());
+		cV2->GetObject()->AddImpluse(-deltaVel, collisionNormal, cV1->GetObject()->GetInverseMass());
 	}
 }
 

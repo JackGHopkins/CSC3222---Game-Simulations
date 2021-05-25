@@ -15,6 +15,7 @@ Vector4 pixieFrames[] = {
 Pixie::Pixie() : SimObject() {
 	texture			= texManager->GetTexture("FruitWizard\\super_random_sprites.png");
 	animFrameCount	= 4;
+	inverseMass		= 1;
 }
 
 Pixie::~Pixie() {

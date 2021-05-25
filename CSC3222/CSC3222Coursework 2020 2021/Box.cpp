@@ -5,13 +5,17 @@ using namespace NCL::CSC3222;
 
 Box::Box() {}
 
-Box::Box(float posX, float posY, SimObject* object, Vector2 halfLength) :
-	CollisionVolume(posX - halfLength.x, posY - halfLength.y, halfLength, object), // minus halfLength to make the position being in the center, not bottom left. 
+Box::Box(std::string name, float posX, float posY, SimObject* object, Vector2 halfLength, COLLISION_STATE collsionState) :
+	CollisionVolume(name, posX - halfLength.x, posY - halfLength.y, halfLength, object, collsionState), // minus halfLength to make the position being in the center, not bottom left. 
 	halfLength(halfLength) {}
 
 // Copy Constructor
-Box::Box(float posX, float posY, Vector2 halfLength) :
-	CollisionVolume(posX - halfLength.x, posY - halfLength.y, halfLength),  // minus halfLength to make the position being in the center, not bottom left. 
+Box::Box(std::string name, float posX, float posY, Vector2 halfLength, COLLISION_STATE collsionState) :
+	CollisionVolume(name, posX - halfLength.x, posY - halfLength.y, halfLength, collsionState),  // minus halfLength to make the position being in the center, not bottom left. 
+	halfLength(halfLength) {}
+
+Box::Box(std::string name, float posX, float posY, SimObject* object, Vector2 halfLength) :
+	CollisionVolume(name, posX - halfLength.x, posY - halfLength.y, halfLength, object), // minus halfLength to make the position being in the center, not bottom left. 
 	halfLength(halfLength) {}
 
 Box::~Box() {}

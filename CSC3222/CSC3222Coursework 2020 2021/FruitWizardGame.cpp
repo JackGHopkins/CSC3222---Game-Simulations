@@ -81,8 +81,12 @@ void FruitWizardGame::Update(float dt) {
 	//renderer->DrawCircle(Vector2(100, 100), 10.0f, Vector4(1, 0, 1, 1));
 
 	// Player
+	if(player->GetCollider()->GetCollisionState() != CollisionVolume::COLLISION_STATE::grounded)
+		player->AddForce(Vector2(0, -1000));
+
 	renderer->DrawBox(Vector2(player->GetPosition().x, player->GetPosition().y), Vector2(10, 10), Vector4(1, 0, 0, 1));
-	player->SetCollider(new Box(player->GetPosition().x, player->GetPosition().y, player, Vector2(10, 10)));
+	player->SetCollider(new Box("Player", player->GetPosition().x, player->GetPosition().y, player, Vector2(10, 10)));
+
 
 	// Spell
 	if (Window::GetKeyboard()->KeyPressed(KeyboardKeys::SPACE)) {
@@ -93,13 +97,13 @@ void FruitWizardGame::Update(float dt) {
 	}
 
 	// Test Guard
-	renderer->DrawBox(Vector2(testGuard->GetPosition().x, testGuard->GetPosition().y - 2), Vector2(10,14), Vector4(1, 0, 0, 1));
+	//renderer->DrawBox(Vector2(testGuard->GetPosition().x, testGuard->GetPosition().y - 2), Vector2(10,14), Vector4(1, 0, 0, 1));
 
 	// Pixie
 	renderer->DrawCircle(Vector2(testPixie->GetPosition().x, testPixie->GetPosition().y), 10, Vector4(1, 0, 0, 1));
 
 	// Fruit
-	renderer->DrawCircle(Vector2(testFruit->GetPosition().x, testFruit->GetPosition().y), 10, Vector4(1, 0, 0, 1));
+	//renderer->DrawCircle(Vector2(testFruit->GetPosition().x, testFruit->GetPosition().y), 10, Vector4(1, 0, 0, 1));
 
 	VisualiseEnviromentColliders();
 
@@ -118,19 +122,19 @@ void FruitWizardGame::InitialiseGame() {
 	renderer->SetScreenProperties(16, currentMap->GetMapWidth(), currentMap->GetMapHeight());
 
 	player = new PlayerCharacter();
-	player->SetPosition(Vector2(100, 32));
-	player->SetCollider(new Box(player->GetPosition().x, player->GetPosition().y, player, Vector2(10, 10)));
+	player->SetPosition(Vector2(100, 300));
+	player->SetCollider(new Circle("Player", player->GetPosition().x, player->GetPosition().y, player, 10, CollisionVolume::COLLISION_STATE::airborn));
 	AddNewObject(player);
 
-	testGuard = new Guard();
+	/*testGuard = new Guard();
 	testGuard->SetPosition(Vector2(130, 224));
 	testGuard->SetCollider(new Box(testGuard->GetPosition().x, testGuard->GetPosition().y, testGuard, Vector2(10,14)));
-	AddNewObject(testGuard);
+	AddNewObject(testGuard);*/
 
-	testFruit = new Fruit();
-	testFruit->SetPosition(Vector2(250, 150));
-	testFruit->SetCollider(new Circle(testFruit->GetPosition().x, testFruit->GetPosition().y, testFruit, 10));
-	AddNewObject(testFruit);
+	//testFruit = new Fruit();
+	//testFruit->SetPosition(Vector2(250, 150));
+	//testFruit->SetCollider(new Circle(testFruit->GetPosition().x, testFruit->GetPosition().y, testFruit, 10));
+	//AddNewObject(testFruit);
 
 	PixieDust* testDust = new PixieDust();
 	testDust->SetPosition(Vector2(200, 100));
@@ -138,7 +142,7 @@ void FruitWizardGame::InitialiseGame() {
 
 	testPixie = new Pixie();
 	testPixie->SetPosition(Vector2(100, 155));
-	testPixie->SetCollider(new Circle(testPixie->GetPosition().x, testPixie->GetPosition().y, testPixie, 10));
+	testPixie->SetCollider(new Circle("Pixie", testPixie->GetPosition().x, testPixie->GetPosition().y, testPixie, 10, CollisionVolume::COLLISION_STATE::null));
 	AddNewObject(testPixie);
 
 	Froggo* testFroggo = new Froggo();
@@ -151,7 +155,7 @@ void FruitWizardGame::InitialiseGame() {
 	dustCount		= 0;
 	lives			= 3;
 
-	//SetEnviromentCollisions();
+	SetEnviromentCollisions();
 }
 
 void FruitWizardGame::AddNewObject(SimObject* object) {
@@ -226,59 +230,57 @@ void FruitWizardGame::SetEnviromentCollisions() {
 	float halfTileSize = tileSize / 2;
 
 	// Walls
-	physics->AddCollider(new Box(halfTileSize, tileSize * 10, Vector2(halfTileSize, 160))); // Left
-	testGuard->SetCollider(new Box(testGuard->GetPosition().x, testGuard->GetPosition().y, testGuard, Vector2(10, 14)));
+	physics->AddCollider(new Box("WallLeft", tileSize, tileSize * 20, Vector2(halfTileSize, 160), CollisionVolume::COLLISION_STATE::wall)); // Left
 
-
-	physics->AddCollider(new Box(30 * tileSize - halfTileSize, tileSize * 10, Vector2(halfTileSize, 160))); // Right
+	physics->AddCollider(new Box("WallRight", 30 * tileSize, tileSize * 20, Vector2(halfTileSize, 160), CollisionVolume::COLLISION_STATE::wall)); // Right
 
 	// Floors
-	physics->AddCollider(new Box(15 * tileSize, halfTileSize, Vector2(224, halfTileSize))); // Bottom
+	physics->AddCollider(new Box("0F", 29 * tileSize, tileSize, Vector2(224, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Bottom
 
-	physics->AddCollider(new Box(3 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 5 / 2, halfTileSize))); // Floor 1;0
-	physics->AddCollider(new Box(8 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 1 / 2, halfTileSize))); // Floor 1:1
-	physics->AddCollider(new Box(12.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 4 / 2, halfTileSize))); // Floor 1:2
-	physics->AddCollider(new Box(22.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 12 / 2, halfTileSize))); // Floor 1:3
+	physics->AddCollider(new Box("1:0F", 6 * tileSize, 5 * tileSize, Vector2(tileSize * 5 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 1;0
+	physics->AddCollider(new Box("1:1F", 9 * tileSize, 5 * tileSize, Vector2(tileSize * 1 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 1:1
+	physics->AddCollider(new Box("1:2F", 15 * tileSize, 5 * tileSize, Vector2(tileSize * 4 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 1:2
+	physics->AddCollider(new Box("1:3F", 29 * tileSize, 5 * tileSize, Vector2(tileSize * 12 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 1:3
 
-	physics->AddCollider(new Box(16 * tileSize + halfTileSize, 8 * tileSize + halfTileSize, Vector2(tileSize * 11 / 2, halfTileSize))); // Floor 2:0
-	physics->AddCollider(new Box(26 * tileSize + halfTileSize, 8 * tileSize + halfTileSize, Vector2(tileSize * 5 / 2, halfTileSize))); // Floor 2:1
+	physics->AddCollider(new Box("2:0F", 22 * tileSize, 9 * tileSize, Vector2(tileSize * 11 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 2:0
+	physics->AddCollider(new Box("2:1F", 29 * tileSize, 9 * tileSize, Vector2(tileSize * 5 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 2:1
 
-	physics->AddCollider(new Box(6.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 8 / 2, halfTileSize))); // Floor 3:0
-	physics->AddCollider(new Box(13 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 1 / 2, halfTileSize))); // Floor 3:1
-	physics->AddCollider(new Box(17 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 1 / 2, halfTileSize))); // Floor 3:2
-	physics->AddCollider(new Box(21 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 3 / 2, halfTileSize))); // Floor 3:3
+	physics->AddCollider(new Box("3:0F", 11 * tileSize, 13 * tileSize, Vector2(tileSize * 8 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 3:0
+	physics->AddCollider(new Box("3:1F", 14 * tileSize, 13 * tileSize, Vector2(tileSize * 1 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 3:1
+	physics->AddCollider(new Box("3:2F", 18 * tileSize, 13 * tileSize, Vector2(tileSize * 1 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 3:2
+	physics->AddCollider(new Box("3:3F", 23 * tileSize, 13 * tileSize, Vector2(tileSize * 3 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 3:3
 
-	physics->AddCollider(new Box(2.5 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 4 / 2, halfTileSize))); // Floor 4:0
-	physics->AddCollider(new Box(7 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 1 / 2, halfTileSize))); // Floor 4:1
-	physics->AddCollider(new Box(19 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 13 / 2, halfTileSize))); // Floor 4:2
-	physics->AddCollider(new Box(28 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 1 / 2, halfTileSize))); // Floor 4:3
+	physics->AddCollider(new Box("4:0F", 5 * tileSize, 17 * tileSize, Vector2(tileSize * 4 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 4:0
+	physics->AddCollider(new Box("4:1F", 8 * tileSize, 17 * tileSize, Vector2(tileSize * 1 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 4:1
+	physics->AddCollider(new Box("4:2F", 26 * tileSize, 17 * tileSize, Vector2(tileSize * 13 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 4:2
+	physics->AddCollider(new Box("4:3F", 29 * tileSize, 17 * tileSize, Vector2(tileSize * 1 / 2, halfTileSize), CollisionVolume::COLLISION_STATE::floor)); // Floor 4:3
 
-	// Ladder Tops
-	physics->AddCollider(new Box(6.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 1:0
-	physics->AddCollider(new Box(15.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 1:1
+	//Ladder Tops
+	//physics->AddCollider(new Box("1:0t", 6.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 1:0
+	//physics->AddCollider(new Box("1:1T", 15.5 * tileSize + halfTileSize, 4 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 1:1
 
-	physics->AddCollider(new Box(22.5 * tileSize + halfTileSize, 8 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 2:0
+	//physics->AddCollider(new Box("2:0T", 22.5 * tileSize + halfTileSize, 8 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 2:0
 
-	physics->AddCollider(new Box(1.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 3:0
-	physics->AddCollider(new Box(11.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 3:1
-	physics->AddCollider(new Box(18.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 3:2
+	//physics->AddCollider(new Box("3:0T", 1.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 3:0
+	//physics->AddCollider(new Box("3:1T", 11.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 3:1
+	//physics->AddCollider(new Box("3:2T", 18.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 3:2
 
-	physics->AddCollider(new Box(5.5 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 4:0
-	physics->AddCollider(new Box(26.5 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 4:1
+	//physics->AddCollider(new Box("4:0T", 5.5 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 4:0
+	//physics->AddCollider(new Box("4:1T", 26.5 * tileSize + halfTileSize, 16 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, halfTileSize))); // Floor 4:1
 
 
-	// Ladder Mid & bottom
-	physics->AddCollider(new Box(6.5 * tileSize + halfTileSize, 2 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 1:0
-	physics->AddCollider(new Box(15.5 * tileSize + halfTileSize, 2 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 1:1
-
-	physics->AddCollider(new Box(22.5 * tileSize + halfTileSize, 6 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 2:0
-
-	physics->AddCollider(new Box(1.5 * tileSize + halfTileSize, 8 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 7 * halfTileSize))); // Floor 3:0
-	physics->AddCollider(new Box(11.5 * tileSize + halfTileSize, 10 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 3:1
-	physics->AddCollider(new Box(18.5 * tileSize + halfTileSize, 10 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 3:2
-
-	physics->AddCollider(new Box(5.5 * tileSize + halfTileSize, 14 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 4:0
-	physics->AddCollider(new Box(26.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 7 * halfTileSize))); // Floor 4:1
+	//// Ladder Mid & bottom
+	//physics->AddCollider(new Box("1:0M", 6.5 * tileSize + halfTileSize, 2 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 1:0
+	//physics->AddCollider(new Box("1:1M", 15.5 * tileSize + halfTileSize, 2 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 1:1
+	//								 
+	//physics->AddCollider(new Box("2:0M", 22.5 * tileSize + halfTileSize, 6 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 2:0
+	//								 
+	//physics->AddCollider(new Box("3:0M", 1.5 * tileSize + halfTileSize, 8 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 7 * halfTileSize))); // Floor 3:0
+	//physics->AddCollider(new Box("3:1M", 11.5 * tileSize + halfTileSize, 10 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 3:1
+	//physics->AddCollider(new Box("3:2M", 18.5 * tileSize + halfTileSize, 10 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 3:2
+	//								 
+	//physics->AddCollider(new Box("4:0M", 5.5 * tileSize + halfTileSize, 14 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 3 * halfTileSize))); // Floor 4:0
+	//physics->AddCollider(new Box("4:1M", 26.5 * tileSize + halfTileSize, 12 * tileSize + halfTileSize, Vector2(tileSize * 2 / 2, 7 * halfTileSize))); // Floor 4:1
 }
 
 float FruitWizardGame::RandomNumber(float Min, float Max)
