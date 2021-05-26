@@ -44,6 +44,7 @@ Vector4 guardStunFrames[] = {
 Guard::Guard() : SimObject() {
 	texture = texManager->GetTexture("FruitWizard\\mini_fantasy_sprites_oga_ver.png");
 	animFrameCount	= 6;
+	inverseMass		= 1;
 }
 
 Guard::~Guard() {
@@ -52,17 +53,17 @@ Guard::~Guard() {
 bool Guard::UpdateObject(float dt) {
 	animFrameData = guardWalkFrames[currentanimFrame];
 
-	float testSpeed = 10;
+	float testSpeed = 30;
 	int fps = 60;
 	Vector4* animSource = guardIdleFrames;
 		
 	frame ++;
 	if (frame <= 3 * fps) {
-		AddForce(Vector2(testSpeed, 0) / inverseMass);
+		AddForce(Vector2(testSpeed, 0) * inverseMass);
 		flipAnimFrame = true;
 	} 
 	else if (frame >= 3 * fps) {
-		AddForce(Vector2(-testSpeed, 0) / inverseMass);
+		AddForce(Vector2(-testSpeed, 0) * inverseMass);
 		flipAnimFrame = false;
 	}
 

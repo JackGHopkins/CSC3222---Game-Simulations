@@ -96,28 +96,32 @@ void GameSimsPhysics::CollisionDetection() {
 	for (int i = 0; i < allColliders.size(); i++) {
 		retrievedObjects.clear();
 		retrievedObjects = quadTree.RetrieveObjects(retrievedObjects, allColliders[i]);
+		int colCount = 0;
 
 		for (int j = i + 1; j < retrievedObjects.size(); j++) {
 			if (retrievedObjects[j]->CheckCollision(*retrievedObjects[i])) {
 				std::cout << "Collision between: [" << allColliders[i]->GetName() << "," << allColliders[j]->GetName() << "]" << std::endl;
 				allCollisions.push_back(new CollisionCouple(allColliders[i], allColliders[j]));
 
-				// Change state to grounded if touching the floor
-				if (allColliders[i]->GetCollisionState() == CollisionVolume::COLLISION_STATE::floor && allColliders[j]->GetCollisionState() == CollisionVolume::COLLISION_STATE::airborn)
-					allColliders[j]->SetCollisionState(CollisionVolume::COLLISION_STATE::grounded);
-
-				if (allColliders[i]->GetCollisionState() == CollisionVolume::COLLISION_STATE::airborn && allColliders[j]->GetCollisionState() == CollisionVolume::COLLISION_STATE::floor)
-					allColliders[i]->SetCollisionState(CollisionVolume::COLLISION_STATE::grounded);
+				colCount++;
 
 				// Change state to grounded if touching the floor
-				if (allColliders[i]->GetCollisionState() == CollisionVolume::COLLISION_STATE::ladder)
-					allColliders[j]->SetCollisionState(CollisionVolume::COLLISION_STATE::climb);
+				if (allColliders[i]->GetCollisionState() == CollisionVolume::floor && allColliders[j]->GetCollisionState() == CollisionVolume::airborn)
+					allColliders[j]->SetCollisionState(CollisionVolume::grounded);
 
-				if (allColliders[j]->GetCollisionState() == CollisionVolume::COLLISION_STATE::ladder)
-					allColliders[i]->SetCollisionState(CollisionVolume::COLLISION_STATE::climb);
+				if (allColliders[i]->GetCollisionState() == CollisionVolume::airborn && allColliders[j]->GetCollisionState() == CollisionVolume::floor)
+					allColliders[i]->SetCollisionState(CollisionVolume::grounded);
 
+				// Change state to grounded if touching the floor
+				if (allColliders[i]->GetCollisionState() == CollisionVolume::ladder)
+					allColliders[j]->SetCollisionState(CollisionVolume::climb);
 
+				if (allColliders[j]->GetCollisionState() == CollisionVolume::ladder)
+					allColliders[i]->SetCollisionState(CollisionVolume::climb);
 			}
+		}
+		if (colCount == 0 && allColliders[i]->GetObject()) {
+			allColliders[i]->SetCollisionState(CollisionVolume::airborn);
 		}
 	}
 }

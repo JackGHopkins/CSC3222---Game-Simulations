@@ -18,6 +18,8 @@ namespace NCL {
 
 		class SimObject	: public RigidBody {
 		public:
+			bool			isGravity;
+
 			SimObject();
 			~SimObject();
 

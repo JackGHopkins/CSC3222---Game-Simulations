@@ -66,7 +66,8 @@ PlayerCharacter::PlayerCharacter() : SimObject() {
 	currentAnimState	= PlayerState::Left;
 	texture				= texManager->GetTexture("FruitWizard\\mini_fantasy_sprites_oga_ver.png");
 	animFrameCount		= 6;
-	inverseMass			= 0.1;
+	inverseMass			= 10;
+	isGravity			= true;
 
 	if (this)
 		SetCollider(new Box("Player", this->GetPosition().x, (this->GetPosition().y), this, Vector2(10,16), CollisionVolume::COLLISION_STATE::airborn));
@@ -81,7 +82,7 @@ PlayerCharacter::PlayerState PlayerCharacter::GetCurrentAnimState() {
 }
 
 bool PlayerCharacter::UpdateObject(float dt) {
-	float testSpeed = 100;
+	float testSpeed = 1;
 	Vector4* animSource = idleFrames;
 
 	Vector2 newVelocity;
@@ -97,28 +98,32 @@ bool PlayerCharacter::UpdateObject(float dt) {
 		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::LEFT)) {
 			animSource = runFrames;
 			currentAnimState = PlayerState::Left;
-			AddForce(Vector2(-testSpeed, 0) / inverseMass);
+			AddForce(Vector2(-testSpeed, 0) * inverseMass); 
 			flipAnimFrame = true;
 		}
 		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::RIGHT)) {
 			animSource = runFrames;
 			currentAnimState = PlayerState::Right;
-			AddForce(Vector2(testSpeed, 0) / inverseMass);
+			AddForce(Vector2(testSpeed, 0) * inverseMass);
 			flipAnimFrame = false;
 		}	
 		if (Window::GetKeyboard()->KeyPressed(KeyboardKeys::SPACE)) {
 			currentAnimState = PlayerState::Attack;
 			currentanimFrame = 0;
 		}
-		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::UP)) {
+		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::UP) && this->GetCollider()->GetCollisionState() == CollisionVolume::climb) {
 			animSource = ladderFrames;
+			isGravity = false;
+			velocity = Vector2(0, 0);
 			currentAnimState = PlayerState::Climb;
-			AddForce(Vector2(0, testSpeed / 2) / inverseMass);
+			AddForce(Vector2(0, testSpeed / 2) * inverseMass);
 		}
-		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::DOWN)) {
+		if (Window::GetKeyboard()->KeyDown(KeyboardKeys::DOWN) && this->GetCollider()->GetCollisionState() == CollisionVolume::climb) {
 			animSource = ladderFrames;
+			isGravity = false;
+			velocity = Vector2(0, 0);
 			currentAnimState = PlayerState::Climb;
-			AddForce(Vector2(0, -testSpeed / 2) / inverseMass);
+			AddForce(Vector2(0, -testSpeed / 2) * inverseMass);
 		}
 	}
 

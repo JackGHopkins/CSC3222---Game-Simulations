@@ -38,8 +38,11 @@ void CollisionCouple::FindParameters(CollisionVolume* cV1, CollisionVolume* cV2)
 		If both are Boxes
 	*/
 	if (cV1->GetBoundType() == CollisionVolume::box && cV2->GetBoundType() == CollisionVolume::box) {
+
+		//if ()//if above center
+
 		// If Ys are overlapping more then X.
-		if (cV1Width + cV2Width - abs(deltaX) < cV1Height + cV1Height - abs(deltaY)) {
+		if (cV1Width + cV2Width - abs(deltaX) < cV1Height + cV1Height - abs(deltaY) || (cV1->GetCollisionState() == CollisionVolume::wall || cV2->GetCollisionState() == CollisionVolume::wall)) {
 			collisionNormal = Vector2(deltaX, 0);
 			penDistance = (cV1Width + cV2Width - abs(deltaX));
 		}

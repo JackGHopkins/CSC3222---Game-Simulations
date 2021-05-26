@@ -17,6 +17,7 @@ SimObject::SimObject()	{
 	frameTime			= 0;
 	frameRate			= 10;
 	flipAnimFrame		= true;
+	isGravity			= false;
 }
 
 SimObject::~SimObject()	{
